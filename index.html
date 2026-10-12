@@ -3,18 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>한가람 체육활동 배점 결과 관리</title>
+    <title>한가람 체육활동 종합 안내</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Noto Sans KR Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
         }
-        /* Custom Scrollbar for tables */
+        /* Custom Tab Active Indicator */
+        .tab-btn.active {
+            color: #1e3a8a;
+            border-bottom: 2px solid #1e3a8a;
+            font-weight: 700;
+        }
+        /* Table scroll styling */
         .custom-scrollbar::-webkit-scrollbar {
             height: 6px;
             width: 6px;
@@ -24,163 +32,323 @@
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background: #cbd5e1;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+            border-radius: 3px;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+<body class="min-h-screen flex flex-col antialiased">
 
-    <!-- Header / Navbar -->
-    <header class="bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 text-white shadow-lg sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <!-- Header Section -->
+    <header class="bg-slate-900 text-white border-b border-slate-800 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between py-4 gap-3">
                 <div class="flex items-center space-x-3">
-                    <div class="p-2.5 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
-                        <i class="fa-solid font-bold fa-trophy text-amber-300 text-2xl sm:text-3xl"></i>
+                    <div class="w-10 h-10 rounded-lg bg-blue-700 flex items-center justify-center font-bold text-white text-lg">
+                        한
                     </div>
                     <div>
-                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white">한가람 체육활동 배점 결과</h1>
-                        <p class="text-xs sm:text-sm text-blue-100 font-medium">전체 종합 순위 및 항목별 실시간 배점 현황</p>
+                        <h1 class="text-xl font-bold tracking-tight text-white">한가람 체육활동 종합 안내</h1>
+                        <p class="text-xs text-slate-400">대회 일정 · 경기 규칙 · 학급별 배점 결과</p>
                     </div>
                 </div>
 
-                <!-- Admin Auth Controls -->
-                <div class="flex items-center space-x-3 self-end md:self-auto">
-                    <span id="modeBadge" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">
+                <!-- Admin Status / Auth Toggle -->
+                <div class="flex items-center space-x-3 self-end sm:self-auto">
+                    <span id="modeBadge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">
                         <i class="fa-solid fa-eye text-xs"></i> 일반 조회 모드
                     </span>
-                    <button id="authBtn" onclick="toggleAuthModal()" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-medium px-4 py-2 rounded-xl text-sm transition-all duration-200 backdrop-blur-md border border-white/20 hover:shadow-md">
-                        <i id="authIcon" class="fa-solid fa-lock"></i>
-                        <span id="authBtnText">관리자 로그인</span>
+                    <button id="authBtn" onclick="toggleAuthModal()" class="inline-flex items-center gap-1.5 bg-blue-700 hover:bg-blue-800 text-white font-medium px-3.5 py-1.5 rounded text-xs transition-colors shadow-sm">
+                        <i id="authIcon" class="fa-solid fa-lock text-xs"></i>
+                        <span id="authBtnText">관리자 인증</span>
                     </button>
                 </div>
             </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="flex space-x-6 border-t border-slate-800 pt-2 text-sm text-slate-400">
+                <button onclick="switchTab('scores')" id="tab-scores" class="tab-btn active py-2.5 px-1 focus:outline-none flex items-center gap-2">
+                    <i class="fa-solid fa-list-ol"></i> 배점 결과표
+                </button>
+                <button onclick="switchTab('schedule')" id="tab-schedule" class="tab-btn py-2.5 px-1 focus:outline-none flex items-center gap-2">
+                    <i class="fa-regular fa-calendar-check"></i> 대회 시간표
+                </button>
+                <button onclick="switchTab('rules')" id="tab-rules" class="tab-btn py-2.5 px-1 focus:outline-none flex items-center gap-2">
+                    <i class="fa-solid fa-book-bookmark"></i> 경기 규칙 및 규정
+                </button>
+            </nav>
         </div>
     </header>
 
     <!-- Main Container -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-        <!-- Top 3 Podium Cards -->
-        <section class="space-y-4">
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-crown text-amber-500"></i> TOP 3 명예의 전당
+        <!-- TAB 1: SCORES SECTION -->
+        <section id="sec-scores" class="space-y-6">
+            
+            <!-- Podium / Top 3 Summary (Simple List Style) -->
+            <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-sm">
+                <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-trophy text-amber-500"></i> 현재 실시간 종합 상위 학급 (TOP 3)
                 </h2>
-                <span class="text-xs text-slate-500">최상위 3개 학급 명단</span>
+                <div id="podiumContainer" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <!-- Dynamic Top 3 injected here -->
+                </div>
             </div>
 
-            <div id="podiumCards" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Javascript will dynamically inject Top 1, 2, 3 here -->
+            <!-- Full Scores Table -->
+            <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+                <!-- Table Controls Header -->
+                <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-center space-x-2">
+                        <span class="font-bold text-slate-800">전체 학급 배점 결과</span>
+                        <span id="totalCountBadge" class="bg-slate-200 text-slate-700 text-xs px-2 py-0.5 rounded-full font-semibold">0개 반</span>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <!-- Search Box -->
+                        <div class="relative flex-1 sm:w-48">
+                            <input type="text" id="searchInput" oninput="renderScoresTable()" placeholder="반 검색 (예: 1-1)" 
+                                class="w-full pl-8 pr-3 py-1.5 bg-white border border-slate-300 rounded text-xs focus:outline-none focus:border-blue-600">
+                            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        </div>
+
+                        <!-- Admin Only Buttons -->
+                        <div id="adminControls" class="hidden flex items-center gap-2">
+                            <button onclick="openAddModal()" class="bg-slate-800 hover:bg-slate-900 text-white px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1 shadow-sm transition-colors">
+                                <i class="fa-solid fa-plus text-xs"></i> 반 추가
+                            </button>
+                            <button onclick="resetData()" class="border border-slate-300 bg-white hover:bg-slate-100 text-slate-600 px-2.5 py-1.5 rounded text-xs font-medium transition-colors" title="초기 데이터로 복원">
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-100/80 text-slate-600 text-xs uppercase font-bold border-b border-slate-200">
+                                <th class="py-3 px-4 text-center w-16">순위</th>
+                                <th class="py-3 px-4">학급 / 반</th>
+                                <th class="py-3 px-4 text-center">경기 점수 (60)</th>
+                                <th class="py-3 px-4 text-center">응원 점수 (20)</th>
+                                <th class="py-3 px-4 text-center">질서/태도 (10)</th>
+                                <th class="py-3 px-4 text-center">참여율 (10)</th>
+                                <th class="py-3 px-4 text-center font-bold text-blue-900 bg-blue-50/50">총점 (100)</th>
+                                <th id="adminColHeader" class="hidden py-3 px-4 text-center w-24">수정/삭제</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scoresTbody" class="divide-y divide-slate-200 text-slate-700">
+                            <!-- Dynamic score rows -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
-        <!-- Full Results Table Section -->
-        <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
-            <!-- Table Header Controls -->
-            <div class="p-5 bg-slate-50/80 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div class="flex items-center space-x-3">
-                    <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
-                        <i class="fa-solid fa-list-ol text-lg"></i>
-                    </div>
+        <!-- TAB 2: SCHEDULE SECTION -->
+        <section id="sec-schedule" class="hidden space-y-6">
+            <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-sm">
+                <div class="border-b border-slate-200 pb-3 mb-4 flex justify-between items-center">
                     <div>
-                        <h3 class="font-bold text-slate-800 text-lg">전체 순위 및 배점 결과표</h3>
-                        <p class="text-xs text-slate-500">모든 참가 학급의 상세 배점 결과를 확인합니다.</p>
+                        <h2 class="text-base font-bold text-slate-800">체육활동 진행 시간표</h2>
+                        <p class="text-xs text-slate-500">당일 사정에 따라 진행 시간이 일부 조정될 수 있습니다.</p>
                     </div>
+                    <span class="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded border border-blue-200">주운동장 & 체육관</span>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-3">
-                    <!-- Search Input -->
-                    <div class="relative flex-1 sm:w-64">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                        <input type="text" id="searchInput" oninput="renderTable()" placeholder="학급명 또는 팀명 검색..." 
-                            class="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
-                    </div>
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 text-xs font-bold border-b border-slate-200">
+                                <th class="py-2.5 px-4 w-28">시간</th>
+                                <th class="py-2.5 px-4 w-44">구분 / 종목</th>
+                                <th class="py-2.5 px-4 w-32">장소</th>
+                                <th class="py-2.5 px-4">내용 및 진행 안내</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-slate-700">
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-3 px-4 font-semibold text-slate-500">08:50 ~ 09:20</td>
+                                <td class="py-3 px-4 font-bold text-slate-900">개회식 및 개회사</td>
+                                <td class="py-3 px-4 text-slate-600">주운동장</td>
+                                <td class="py-3 px-4 text-slate-600">학급별 정렬, 개회 선언, 선수 대표 선서, 준비 운동</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-3 px-4 font-semibold text-slate-500">09:30 ~ 10:30</td>
+                                <td class="py-3 px-4 font-bold text-blue-800">축구 (예선/본선)</td>
+                                <td class="py-3 px-4 text-slate-600">주운동장 A구역</td>
+                                <td class="py-3 px-4 text-slate-600">학년별 토너먼트 진행 (전·후반 각 15분)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-3 px-4 font-semibold text-slate-500">10:30 ~ 11:30</td>
+                                <td class="py-3 px-4 font-bold text-blue-800">피구 & 피구 토너먼트</td>
+                                <td class="py-3 px-4 text-slate-600">실내 체육관</td>
+                                <td class="py-3 px-4 text-slate-600">여학생 및 통합 종목 진행, 아웃 판정 심판 준수</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-3 px-4 font-semibold text-slate-500">11:30 ~ 12:30</td>
+                                <td class="py-3 px-4 font-bold text-blue-800">단체 줄넘기</td>
+                                <td class="py-3 px-4 text-slate-600">주운동장 B구역</td>
+                                <td class="py-3 px-4 text-slate-600">반별 10명 참가, 2회 실시 후 최고 기록 합산</td>
+                            </tr>
+                            <tr class="bg-amber-50/50 hover:bg-amber-50">
+                                <td class="py-3 px-4 font-semibold text-amber-800">12:30 ~ 13:30</td>
+                                <td class="py-3 px-4 font-bold text-amber-900"><i class="fa-solid fa-utensils text-xs"></i> 중식 및 휴식</td>
+                                <td class="py-3 px-4 text-slate-600">각 학급 교실 / 급식실</td>
+                                <td class="py-3 px-4 text-slate-600">식사 후 주변 쓰레기 정돈 및 안전점검</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-3 px-4 font-semibold text-slate-500">13:30 ~ 14:30</td>
+                                <td class="py-3 px-4 font-bold text-blue-800">줄다리기 (전체)</td>
+                                <td class="py-3 px-4 text-slate-600">주운동장 중앙</td>
+                                <td class="py-3 px-4 text-slate-600">학년 대항 3판 2선승제, 장갑 착용 필수</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-3 px-4 font-semibold text-slate-500">14:30 ~ 15:30</td>
+                                <td class="py-3 px-4 font-bold text-indigo-700">이어달리기 (계주)</td>
+                                <td class="py-3 px-4 text-slate-600">주운동장 트랙</td>
+                                <td class="py-3 px-4 text-slate-600">체육활동의 꽃, 반별 대표 주자 4명 (남2, 여2)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-3 px-4 font-semibold text-slate-500">15:30 ~ 16:00</td>
+                                <td class="py-3 px-4 font-bold text-slate-900">폐회식 및 시상식</td>
+                                <td class="py-3 px-4 text-slate-600">주운동장</td>
+                                <td class="py-3 px-4 text-slate-600">종합 순위 발표, 부문별 시상, 교가 제창 및 성가 정리</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
 
-                    <!-- Admin Edit Actions (Hidden by default) -->
-                    <div id="adminControls" class="hidden flex items-center gap-2">
-                        <button onclick="openAddModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-3.5 py-2 rounded-xl text-sm flex items-center gap-1.5 shadow-sm transition-all">
-                            <i class="fa-solid fa-plus text-xs"></i> 학급 추가
-                        </button>
-                        <button onclick="resetData()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium px-3.5 py-2 rounded-xl text-sm flex items-center gap-1.5 transition-all" title="초기 샘플 데이터로 복원">
-                            <i class="fa-solid fa-rotate-right text-xs"></i> 초기화
-                        </button>
-                    </div>
+        <!-- TAB 3: RULES SECTION -->
+        <section id="sec-rules" class="hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Score Breakdown Standard -->
+                <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-800 border-b border-slate-200 pb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-calculator text-blue-700"></i> 배점 및 심사 기준 (총 100점)
+                    </h3>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex items-start gap-2.5">
+                            <span class="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded text-xs mt-0.5">60점</span>
+                            <div>
+                                <strong class="text-slate-800">경기 점수:</strong> 종목별 승패에 따른 순위 배점 합산 (축구, 피구, 줄다리기, 계주, 줄넘기)
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <span class="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded text-xs mt-0.5">20점</span>
+                            <div>
+                                <strong class="text-slate-800">응원 점수:</strong> 학급 응원 참여도, 응원도구 활용, 단합력 및 응원 매너 평가
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <span class="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded text-xs mt-0.5">10점</span>
+                            <div>
+                                <strong class="text-slate-800">질서 및 태도:</strong> 경계선 준수, 심판 판정 복종, 경기장 청결 상태 유지
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <span class="bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded text-xs mt-0.5">10점</span>
+                            <div>
+                                <strong class="text-slate-800">참여율:</strong> 선수 소집 시간 준수, 미참여 인원 최소화
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Penalties & Deductions -->
+                <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-800 border-b border-slate-200 pb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-600"></i> 감점 및 유의사항
+                    </h3>
+                    <ul class="space-y-2.5 text-sm text-slate-600">
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-minus text-rose-500 text-xs"></i>
+                            <span>경기 중 비신사적인 언행 또는 폭언 발생 시: <strong>회당 -5점 감점</strong></span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-minus text-rose-500 text-xs"></i>
+                            <span>심판 판정에 대한 과도한 항의 및 경기 지연: <strong>-5점 감점</strong></span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-minus text-rose-500 text-xs"></i>
+                            <span>학급 응원석 주변 쓰레기 방치 시: <strong>종료 후 -5점 감점</strong></span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i class="fa-solid fa-minus text-rose-500 text-xs"></i>
+                            <span>소집 시간 5분 이상 지연 참가 시: <strong>부전패 처리 가능</strong></span>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- Table -->
-            <div class="overflow-x-auto custom-scrollbar">
-                <table class="w-full text-left border-collapse min-w-[700px]">
-                    <thead>
-                        <tr class="bg-slate-100/70 text-slate-600 text-xs uppercase font-bold tracking-wider border-b border-slate-200">
-                            <th class="py-3.5 px-4 text-center w-16">순위</th>
-                            <th class="py-3.5 px-4 font-semibold">학급 / 팀명</th>
-                            <th class="py-3.5 px-4 text-center">경기 점수 (60)</th>
-                            <th class="py-3.5 px-4 text-center">응원 점수 (20)</th>
-                            <th class="py-3.5 px-4 text-center">질서/태도 (10)</th>
-                            <th class="py-3.5 px-4 text-center">참여율 (10)</th>
-                            <th class="py-3.5 px-4 text-center font-extrabold text-indigo-700 bg-indigo-50/50">총점 (100)</th>
-                            <th id="adminColHeader" class="hidden py-3.5 px-4 text-center w-28">관리</th>
-                        </tr>
-                    </thead>
-                    <tbody id="scoreTableBody" class="divide-y divide-slate-100 text-sm font-medium text-slate-700">
-                        <!-- Dynamic Rows -->
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Table Footer info -->
-            <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-2">
-                <div>총 참가 팀: <span id="totalCount" class="font-bold text-slate-700">0</span>개 학급</div>
-                <div class="flex items-center gap-4">
-                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span> 1위</span>
-                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-slate-400 inline-block"></span> 2위</span>
-                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-700 inline-block"></span> 3위</span>
+            <!-- Detailed Rules per Sport -->
+            <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-sm space-y-4">
+                <h3 class="font-bold text-slate-800 border-b border-slate-200 pb-2">종목별 상세 규정</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                    <div class="p-3.5 bg-slate-50 rounded border border-slate-200">
+                        <h4 class="font-bold text-slate-800 mb-1.5"><i class="fa-solid fa-futbol text-blue-700"></i> 축구</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            • 전·후반 각 15분 (휴식 5분)<br>
+                            • 무승부 시 승부차기 (각 반 3명)<br>
+                            • 과도한 태클 금지 및 안전화 착용 불가
+                        </p>
+                    </div>
+                    <div class="p-3.5 bg-slate-50 rounded border border-slate-200">
+                        <h4 class="font-bold text-slate-800 mb-1.5"><i class="fa-solid fa-basketball text-blue-700"></i> 피구</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            • 단판 10분 진행<br>
+                            • 얼굴/머리 맞을 경우 아웃 미인정<br>
+                            • 금지된 라인 이탈 시 공 소유권 이전
+                        </p>
+                    </div>
+                    <div class="p-3.5 bg-slate-50 rounded border border-slate-200">
+                        <h4 class="font-bold text-slate-800 mb-1.5"><i class="fa-solid fa-person-running text-blue-700"></i> 계주</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            • 바통 터치존(20m) 이내 터치 필수<br>
+                            • 바통 낙구 시 본인이 직접 주워서 진행<br>
+                            • 진로 방해 행위 시 자격 박탈
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Modal 1: Password Auth Modal -->
-    <div id="passwordModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5 border border-slate-100 transform transition-all">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-shield-halved text-indigo-600"></i> 관리자 인증
+    <!-- Modal 1: Password Auth -->
+    <div id="passwordModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-lg shadow-xl max-w-sm w-full p-5 space-y-4 border border-slate-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                    <i class="fa-solid fa-lock text-blue-700"></i> 관리자 인증
                 </h3>
-                <button onclick="toggleAuthModal()" class="text-slate-400 hover:text-slate-600 rounded-lg p-1">
-                    <i class="fa-solid fa-xmark text-lg"></i>
+                <button onclick="toggleAuthModal()" class="text-slate-400 hover:text-slate-600 text-sm">
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <p class="text-sm text-slate-600">
-                배점 결과를 수정하거나 변경하려면 관리자 비밀번호를 입력해주세요.
+            <p class="text-xs text-slate-600">
+                점수를 수정하거나 학급을 추가하려면 비밀번호를 입력하세요.
             </p>
 
-            <form onsubmit="handleLogin(event)" class="space-y-4">
+            <form onsubmit="handleLogin(event)" class="space-y-3">
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">비밀번호</label>
-                    <div class="relative">
-                        <input type="password" id="passwordInput" placeholder="비밀번호 입력" required
-                            class="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm transition-all">
-                        <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                            <i id="eyeIcon" class="fa-solid fa-eye"></i>
-                        </button>
-                    </div>
-                    <p id="passwordError" class="text-xs text-rose-500 mt-1.5 hidden flex items-center gap-1">
-                        <i class="fa-solid fa-circle-exclamation"></i> 비밀번호가 올바르지 않습니다.
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">비밀번호</label>
+                    <input type="password" id="passwordInput" placeholder="비밀번호 입력" required
+                        class="w-full px-3 py-2 border border-slate-300 rounded text-sm focus:outline-none focus:border-blue-700">
+                    <p id="passwordError" class="text-xs text-rose-600 mt-1 hidden flex items-center gap-1">
+                        <i class="fa-solid fa-circle-exclamation"></i> 비밀번호가 불일치합니다.
                     </p>
                 </div>
 
-                <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="toggleAuthModal()" class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-xl transition-all">
+                <div class="flex justify-end gap-2 pt-1">
+                    <button type="button" onclick="toggleAuthModal()" class="px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded">
                         취소
                     </button>
-                    <button type="submit" class="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md transition-all">
+                    <button type="submit" class="px-4 py-1.5 text-xs font-semibold text-white bg-blue-700 hover:bg-blue-800 rounded shadow-xs">
                         확인
                     </button>
                 </div>
@@ -188,56 +356,116 @@
         </div>
     </div>
 
-    <!-- Modal 2: Edit Score Modal -->
-    <div id="editModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-5 border border-slate-100">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-pen-to-square text-indigo-600"></i> 배점 점수 수정
+    <!-- Modal 2: Add Class Modal (Dropdown Grade/Class, 0 points default) -->
+    <div id="addModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-lg shadow-xl max-w-sm w-full p-5 space-y-4 border border-slate-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                    <i class="fa-solid fa-plus-circle text-blue-700"></i> 새 학급 추가
                 </h3>
-                <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-600 rounded-lg p-1">
-                    <i class="fa-solid fa-xmark text-lg"></i>
+                <button onclick="closeAddModal()" class="text-slate-400 hover:text-slate-600 text-sm">
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <form onsubmit="handleSaveEdit(event)" class="space-y-4">
+            <form onsubmit="handleAddClass(event)" class="space-y-3">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">학년 선택</label>
+                        <select id="addGrade" class="w-full px-2.5 py-2 border border-slate-300 rounded text-sm focus:outline-none focus:border-blue-700 bg-white">
+                            <option value="1">1학년</option>
+                            <option value="2">2학년</option>
+                            <option value="3">3학년</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">반 선택</label>
+                        <select id="addClassNum" class="w-full px-2.5 py-2 border border-slate-300 rounded text-sm focus:outline-none focus:border-blue-700 bg-white">
+                            <option value="1">1반</option>
+                            <option value="2">2반</option>
+                            <option value="3">3반</option>
+                            <option value="4">4반</option>
+                            <option value="5">5반</option>
+                            <option value="6">6반</option>
+                            <option value="7">7반</option>
+                            <option value="8">8반</option>
+                            <option value="9">9반</option>
+                            <option value="10">10반</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded text-xs text-slate-600">
+                    <p class="font-semibold text-slate-700 mb-0.5">안내사항</p>
+                    • 추가되는 학급의 초기 점수는 <strong class="text-blue-700">전부 0점</strong>으로 설정됩니다.<br>
+                    • 생성 후 표에서 점수를 직접 수정하실 수 있습니다.
+                </div>
+
+                <div class="flex justify-end gap-2 pt-1">
+                    <button type="button" onclick="closeAddModal()" class="px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded">
+                        취소
+                    </button>
+                    <button type="submit" class="px-4 py-1.5 text-xs font-semibold text-white bg-slate-900 hover:bg-black rounded shadow-xs">
+                        학급 생성
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 3: Edit Score Modal -->
+    <div id="editModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-5 space-y-4 border border-slate-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                    <i class="fa-solid fa-pen-to-square text-blue-700"></i> 배점 입력 및 수정
+                </h3>
+                <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-600 text-sm">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleSaveEdit(event)" class="space-y-3">
                 <input type="hidden" id="editId">
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">학급 / 팀명</label>
-                    <input type="text" id="editName" required class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">학급 명칭</label>
+                    <input type="text" id="editName" readonly class="w-full px-3 py-1.5 bg-slate-100 border border-slate-300 rounded text-sm text-slate-600 font-bold">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">경기 점수 (최대 60)</label>
-                        <input type="number" min="0" max="60" id="editGame" required oninput="calculateModalTotal()" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">경기 점수 (max 60)</label>
+                        <input type="number" min="0" max="60" id="editGame" required oninput="calculateModalTotal()" 
+                            class="w-full px-3 py-1.5 border border-slate-300 rounded text-sm focus:outline-none focus:border-blue-700">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">응원 점수 (최대 20)</label>
-                        <input type="number" min="0" max="20" id="editCheer" required oninput="calculateModalTotal()" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">응원 점수 (max 20)</label>
+                        <input type="number" min="0" max="20" id="editCheer" required oninput="calculateModalTotal()" 
+                            class="w-full px-3 py-1.5 border border-slate-300 rounded text-sm focus:outline-none focus:border-blue-700">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">질서/태도 (최대 10)</label>
-                        <input type="number" min="0" max="10" id="editOrder" required oninput="calculateModalTotal()" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">질서/태도 (max 10)</label>
+                        <input type="number" min="0" max="10" id="editOrder" required oninput="calculateModalTotal()" 
+                            class="w-full px-3 py-1.5 border border-slate-300 rounded text-sm focus:outline-none focus:border-blue-700">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">참여율 (최대 10)</label>
-                        <input type="number" min="0" max="10" id="editParticipation" required oninput="calculateModalTotal()" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">참여율 (max 10)</label>
+                        <input type="number" min="0" max="10" id="editParticipation" required oninput="calculateModalTotal()" 
+                            class="w-full px-3 py-1.5 border border-slate-300 rounded text-sm focus:outline-none focus:border-blue-700">
                     </div>
                 </div>
 
-                <!-- Live Total Preview -->
-                <div class="bg-indigo-50/70 p-3.5 rounded-xl flex justify-between items-center border border-indigo-100">
-                    <span class="text-xs font-bold text-indigo-900">계산된 총점</span>
-                    <span id="modalTotalPreview" class="text-xl font-extrabold text-indigo-700">0 점</span>
+                <div class="p-3 bg-blue-50/60 border border-blue-100 rounded flex justify-between items-center">
+                    <span class="text-xs font-bold text-blue-900">합산 총점</span>
+                    <span id="modalTotalPreview" class="text-lg font-black text-blue-800">0 점</span>
                 </div>
 
-                <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-xl transition-all">
+                <div class="flex justify-end gap-2 pt-1">
+                    <button type="button" onclick="closeEditModal()" class="px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded">
                         취소
                     </button>
-                    <button type="submit" class="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md transition-all">
-                        저장하기
+                    <button type="submit" class="px-4 py-1.5 text-xs font-semibold text-white bg-blue-700 hover:bg-blue-800 rounded shadow-xs">
+                        저장
                     </button>
                 </div>
             </form>
@@ -245,32 +473,44 @@
     </div>
 
     <!-- Notification Toast -->
-    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-2 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-2.5 rounded shadow-lg flex items-center space-x-2 transform translate-y-20 opacity-0 transition-all duration-200 z-50 text-xs">
         <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
-        <span id="toastMsg" class="text-sm font-medium">안내 메시지</span>
+        <span id="toastMsg">메시지</span>
     </div>
 
+    <!-- JavaScript Logic -->
     <script>
-        // --- CONSTANTS & INITIAL STATE ---
         const ADMIN_PASS = "050505!";
-        const STORAGE_KEY = "hangaram_sports_scores_v1";
+        const STORAGE_KEY = "hangaram_sports_scores_v2";
 
         let isAdmin = false;
 
-        // Sample Data if LocalStorage is empty
+        // Default Initial Data
         const defaultScores = [
-            { id: 1, name: "1학년 1반", game: 58, cheer: 19, order: 10, participation: 10 },
-            { id: 2, name: "1학년 2반", game: 52, cheer: 17, order: 9, participation: 8 },
-            { id: 3, name: "2학년 1반", game: 60, cheer: 20, order: 10, participation: 9 },
-            { id: 4, name: "2학년 2반", game: 48, cheer: 18, order: 8, participation: 10 },
-            { id: 5, name: "3학년 1반", game: 55, cheer: 16, order: 9, participation: 9 },
-            { id: 6, name: "3학년 2반", game: 45, cheer: 15, order: 8, participation: 8 },
-            { id: 7, name: "3학년 3반", game: 50, cheer: 19, order: 9, participation: 10 }
+            { id: 1, name: "1-1", game: 55, cheer: 18, order: 9, participation: 10 },
+            { id: 2, name: "1-2", game: 48, cheer: 16, order: 8, participation: 9 },
+            { id: 3, name: "2-1", game: 60, cheer: 20, order: 10, participation: 10 },
+            { id: 4, name: "2-2", game: 52, cheer: 17, order: 9, participation: 8 },
+            { id: 5, name: "3-1", game: 58, cheer: 19, order: 9, participation: 10 },
+            { id: 6, name: "3-2", game: 42, cheer: 15, order: 8, participation: 8 },
+            { id: 7, name: "3-3", game: 50, cheer: 17, order: 9, participation: 9 }
         ];
 
         let scoresData = [];
 
-        // --- INIT DATA ---
+        // --- TAB SWITCHING ---
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+
+            document.getElementById('sec-scores').classList.add('hidden');
+            document.getElementById('sec-schedule').classList.add('hidden');
+            document.getElementById('sec-rules').classList.add('hidden');
+
+            document.getElementById(`sec-${tabName}`).classList.remove('hidden');
+        }
+
+        // --- DATA MANAGEMENT ---
         function initData() {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
@@ -298,9 +538,8 @@
             }
         }
 
-        // --- RANK & SCORE CALCULATIONS ---
+        // --- SCORE & RANK COMPUTATION ---
         function getProcessedScores() {
-            // Calculate total for each
             let list = scoresData.map(item => {
                 const total = (Number(item.game) || 0) + 
                               (Number(item.cheer) || 0) + 
@@ -309,10 +548,10 @@
                 return { ...item, total };
             });
 
-            // Sort by total descending
+            // Sort by total score descending
             list.sort((a, b) => b.total - a.total);
 
-            // Assign ranks (handling ties)
+            // Rank assignment handling ties
             let currentRank = 1;
             for (let i = 0; i < list.length; i++) {
                 if (i > 0 && list[i].total < list[i - 1].total) {
@@ -324,50 +563,46 @@
             return list;
         }
 
-        // --- UI RENDER FUNCTIONS ---
+        // --- RENDER LOGIC ---
         function renderAll() {
             const processed = getProcessedScores();
             renderPodium(processed);
-            renderTable(processed);
+            renderScoresTable(processed);
             updateAdminUI();
         }
 
         function renderPodium(processedData) {
-            const container = document.getElementById("podiumCards");
+            const container = document.getElementById("podiumContainer");
             container.innerHTML = "";
 
             const top3 = processedData.slice(0, 3);
             if (top3.length === 0) {
-                container.innerHTML = `<p class="text-sm text-slate-500 col-span-3 text-center py-4">등록된 데이터가 없습니다.</p>`;
+                container.innerHTML = `<p class="text-xs text-slate-400 col-span-3 text-center py-2">등록된 학급이 없습니다.</p>`;
                 return;
             }
 
-            // Podium Display Mapping (1st, 2nd, 3rd styling)
             const badges = [
-                { bg: "bg-gradient-to-br from-amber-400 to-amber-600", border: "border-amber-300", text: "text-amber-600", label: "1위 (우승)", icon: "fa-trophy" },
-                { bg: "bg-gradient-to-br from-slate-300 to-slate-500", border: "border-slate-300", text: "text-slate-500", label: "2위 (준우승)", icon: "fa-medal" },
-                { bg: "bg-gradient-to-br from-amber-700 to-amber-900", border: "border-amber-800", text: "text-amber-800", label: "3위 (3위)", icon: "fa-award" }
+                { title: "1위 (우승)", bg: "bg-amber-500", border: "border-amber-200", text: "text-amber-700" },
+                { title: "2위 (준우승)", bg: "bg-slate-400", border: "border-slate-200", text: "text-slate-600" },
+                { title: "3위 (3위)", bg: "bg-amber-800", border: "border-amber-200", text: "text-amber-900" }
             ];
 
             top3.forEach((item, index) => {
-                const style = badges[index] || badges[2];
+                const badge = badges[index] || badges[2];
                 const cardHtml = `
-                    <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm relative overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
-                        <div class="absolute -right-3 -top-3 w-16 h-16 ${style.bg} opacity-10 rounded-full flex items-center justify-center"></div>
-                        <div>
-                            <div class="flex justify-between items-start mb-3">
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-white ${style.bg} shadow-sm">
-                                    <i class="fa-solid ${style.icon}"></i> ${style.label}
-                                </span>
-                                <span class="text-2xl font-black text-slate-800 tracking-tight">${item.total} <span class="text-xs font-normal text-slate-500">점</span></span>
+                    <div class="p-3.5 bg-slate-50 border border-slate-200 rounded flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <span class="${badge.bg} text-white font-bold text-xs w-6 h-6 rounded flex items-center justify-center">
+                                ${index + 1}
+                            </span>
+                            <div>
+                                <div class="font-bold text-slate-800 text-sm">${escapeHtml(item.name)}</div>
+                                <div class="text-xs text-slate-500">경기:${item.game} | 응원:${item.cheer} | 질서:${item.order} | 참여:${item.participation}</div>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-900">${escapeHtml(item.name)}</h3>
                         </div>
-                        <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 grid grid-cols-2 gap-y-1">
-                            <span>경기: <strong class="text-slate-700">${item.game}</strong></span>
-                            <span>응원: <strong class="text-slate-700">${item.cheer}</strong></span>
-                            <span>질서: <strong class="text-slate-700">${item.order}</strong></span>
-                            <span>참여: <strong class="text-slate-700">${item.participation}</strong></span>
+                        <div class="text-right">
+                            <span class="text-lg font-extrabold text-blue-900">${item.total}</span>
+                            <span class="text-xs text-slate-500">점</span>
                         </div>
                     </div>
                 `;
@@ -375,23 +610,21 @@
             });
         }
 
-        function renderTable(processedData) {
+        function renderScoresTable(processedData) {
             if (!processedData) processedData = getProcessedScores();
 
-            const searchQuery = (document.getElementById("searchInput").value || "").trim().toLowerCase();
-            const tbody = document.getElementById("scoreTableBody");
+            const query = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+            const tbody = document.getElementById("scoresTbody");
             tbody.innerHTML = "";
 
-            const filtered = processedData.filter(item => item.name.toLowerCase().includes(searchQuery));
-
-            document.getElementById("totalCount").innerText = filtered.length;
+            const filtered = processedData.filter(item => item.name.toLowerCase().includes(query));
+            document.getElementById("totalCountBadge").innerText = `${filtered.length}개 반`;
 
             if (filtered.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="${isAdmin ? 8 : 7}" class="text-center py-8 text-slate-400 text-sm">
-                            <i class="fa-solid fa-folder-open text-2xl mb-2 block"></i>
-                            검색 결과 또는 등록된 배점 결과가 없습니다.
+                        <td colspan="${isAdmin ? 8 : 7}" class="text-center py-6 text-slate-400 text-xs">
+                            조회할 데이터가 없거나 검색 결과가 없습니다.
                         </td>
                     </tr>
                 `;
@@ -399,41 +632,41 @@
             }
 
             filtered.forEach(item => {
-                let rankBadge = `<span class="font-bold text-slate-600">${item.rank}위</span>`;
-                if (item.rank === 1) rankBadge = `<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-100 text-amber-700 font-extrabold text-xs border border-amber-300">1</span>`;
-                else if (item.rank === 2) rankBadge = `<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-200 text-slate-700 font-extrabold text-xs border border-slate-300">2</span>`;
-                else if (item.rank === 3) rankBadge = `<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-900/10 text-amber-800 font-extrabold text-xs border border-amber-800/20">3</span>`;
+                let rankDisplay = `<span class="font-semibold text-slate-500">${item.rank}</span>`;
+                if (item.rank === 1) rankDisplay = `<span class="inline-block w-5 h-5 rounded bg-amber-500 text-white font-bold text-xs text-center leading-5">1</span>`;
+                else if (item.rank === 2) rankDisplay = `<span class="inline-block w-5 h-5 rounded bg-slate-400 text-white font-bold text-xs text-center leading-5">2</span>`;
+                else if (item.rank === 3) rankDisplay = `<span class="inline-block w-5 h-5 rounded bg-amber-800 text-white font-bold text-xs text-center leading-5">3</span>`;
 
                 const adminTd = isAdmin ? `
-                    <td class="py-3 px-4 text-center">
+                    <td class="py-2.5 px-4 text-center">
                         <div class="flex items-center justify-center gap-1.5">
-                            <button onclick="openEditModal(${item.id})" class="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="수정">
+                            <button onclick="openEditModal(${item.id})" class="p-1 text-blue-700 hover:bg-blue-50 rounded" title="점수 입력/수정">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
-                            <button onclick="deleteItem(${item.id})" class="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="삭제">
+                            <button onclick="deleteItem(${item.id})" class="p-1 text-rose-600 hover:bg-rose-50 rounded" title="삭제">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </div>
                     </td>
                 ` : '';
 
-                const trHtml = `
+                const rowHtml = `
                     <tr class="hover:bg-slate-50/80 transition-colors">
-                        <td class="py-3.5 px-4 text-center">${rankBadge}</td>
-                        <td class="py-3.5 px-4 font-bold text-slate-800">${escapeHtml(item.name)}</td>
-                        <td class="py-3.5 px-4 text-center text-slate-600">${item.game}</td>
-                        <td class="py-3.5 px-4 text-center text-slate-600">${item.cheer}</td>
-                        <td class="py-3.5 px-4 text-center text-slate-600">${item.order}</td>
-                        <td class="py-3.5 px-4 text-center text-slate-600">${item.participation}</td>
-                        <td class="py-3.5 px-4 text-center font-extrabold text-indigo-700 bg-indigo-50/30 text-base">${item.total}</td>
+                        <td class="py-2.5 px-4 text-center">${rankDisplay}</td>
+                        <td class="py-2.5 px-4 font-bold text-slate-900">${escapeHtml(item.name)}</td>
+                        <td class="py-2.5 px-4 text-center text-slate-600">${item.game}</td>
+                        <td class="py-2.5 px-4 text-center text-slate-600">${item.cheer}</td>
+                        <td class="py-2.5 px-4 text-center text-slate-600">${item.order}</td>
+                        <td class="py-2.5 px-4 text-center text-slate-600">${item.participation}</td>
+                        <td class="py-2.5 px-4 text-center font-extrabold text-blue-900 bg-blue-50/30">${item.total}</td>
                         ${adminTd}
                     </tr>
                 `;
-                tbody.insertAdjacentHTML('beforeend', trHtml);
+                tbody.insertAdjacentHTML('beforeend', rowHtml);
             });
         }
 
-        // --- AUTH & MODE CONTROL ---
+        // --- AUTH CONTROL ---
         function updateAdminUI() {
             const authBtnText = document.getElementById("authBtnText");
             const authIcon = document.getElementById("authIcon");
@@ -443,16 +676,16 @@
 
             if (isAdmin) {
                 authBtnText.innerText = "로그아웃";
-                authIcon.className = "fa-solid fa-right-from-bracket";
-                modeBadge.className = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-400/20 text-amber-200 border border-amber-400/30";
+                authIcon.className = "fa-solid fa-right-from-bracket text-xs";
+                modeBadge.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30";
                 modeBadge.innerHTML = `<i class="fa-solid fa-pen-to-square text-xs"></i> 관리자 수정 모드`;
                 
                 adminControls.classList.remove("hidden");
                 adminColHeader.classList.remove("hidden");
             } else {
-                authBtnText.innerText = "관리자 로그인";
-                authIcon.className = "fa-solid fa-lock";
-                modeBadge.className = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30";
+                authBtnText.innerText = "관리자 인증";
+                authIcon.className = "fa-solid fa-lock text-xs";
+                modeBadge.className = "inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700";
                 modeBadge.innerHTML = `<i class="fa-solid fa-eye text-xs"></i> 일반 조회 모드`;
                 
                 adminControls.classList.add("hidden");
@@ -462,12 +695,10 @@
 
         function toggleAuthModal() {
             if (isAdmin) {
-                // Logout
                 isAdmin = false;
                 showToast("관리자 모드가 해제되었습니다.");
                 renderAll();
             } else {
-                // Show modal
                 document.getElementById("passwordInput").value = "";
                 document.getElementById("passwordError").classList.add("hidden");
                 document.getElementById("passwordModal").classList.remove("hidden");
@@ -481,26 +712,56 @@
             if (inputPass === ADMIN_PASS) {
                 isAdmin = true;
                 document.getElementById("passwordModal").classList.add("hidden");
-                showToast("관리자 인증 성공! 점수 수정이 가능합니다.");
+                showToast("관리자로 인증되었습니다. 배점을 수정할 수 있습니다.");
                 renderAll();
             } else {
                 document.getElementById("passwordError").classList.remove("hidden");
             }
         }
 
-        function togglePasswordVisibility() {
-            const input = document.getElementById("passwordInput");
-            const icon = document.getElementById("eyeIcon");
-            if (input.type === "password") {
-                input.type = "text";
-                icon.className = "fa-solid fa-eye-slash";
-            } else {
-                input.type = "password";
-                icon.className = "fa-solid fa-eye";
-            }
+        // --- ADD CLASS HANDLERS (Grade + ClassNum dropdowns -> 0 points default) ---
+        function openAddModal() {
+            if (!isAdmin) return;
+            document.getElementById("addModal").classList.remove("hidden");
         }
 
-        // --- SCORE EDITING HANDLERS ---
+        function closeAddModal() {
+            document.getElementById("addModal").classList.add("hidden");
+        }
+
+        function handleAddClass(e) {
+            e.preventDefault();
+            if (!isAdmin) return;
+
+            const grade = document.getElementById("addGrade").value;
+            const classNum = document.getElementById("addClassNum").value;
+            const className = `${grade}-${classNum}`;
+
+            // Check duplicate
+            const exists = scoresData.some(s => s.name === className);
+            if (exists) {
+                alert(`이미 '${className}' 학급이 존재합니다.`);
+                return;
+            }
+
+            const newId = scoresData.length > 0 ? Math.max(...scoresData.map(s => s.id)) + 1 : 1;
+            
+            // All 0 points default
+            scoresData.push({
+                id: newId,
+                name: className,
+                game: 0,
+                cheer: 0,
+                order: 0,
+                participation: 0
+            });
+
+            saveData();
+            closeAddModal();
+            showToast(`'${className}' 학급이 추가되었습니다. (기본 0점 시작)`);
+        }
+
+        // --- SCORE EDIT HANDLERS ---
         function openEditModal(id) {
             if (!isAdmin) return;
             const item = scoresData.find(s => s.id === id);
@@ -512,21 +773,6 @@
             document.getElementById("editCheer").value = item.cheer;
             document.getElementById("editOrder").value = item.order;
             document.getElementById("editParticipation").value = item.participation;
-
-            calculateModalTotal();
-            document.getElementById("editModal").classList.remove("hidden");
-        }
-
-        function openAddModal() {
-            if (!isAdmin) return;
-            const newId = scoresData.length > 0 ? Math.max(...scoresData.map(s => s.id)) + 1 : 1;
-            
-            document.getElementById("editId").value = "";
-            document.getElementById("editName").value = `신규 학급 ${newId}`;
-            document.getElementById("editGame").value = 0;
-            document.getElementById("editCheer").value = 0;
-            document.getElementById("editOrder").value = 0;
-            document.getElementById("editParticipation").value = 0;
 
             calculateModalTotal();
             document.getElementById("editModal").classList.remove("hidden");
@@ -549,31 +795,23 @@
             e.preventDefault();
             if (!isAdmin) return;
 
-            const idVal = document.getElementById("editId").value;
-            const name = document.getElementById("editName").value.trim();
+            const id = Number(document.getElementById("editId").value);
             const game = Math.min(60, Math.max(0, Number(document.getElementById("editGame").value) || 0));
             const cheer = Math.min(20, Math.max(0, Number(document.getElementById("editCheer").value) || 0));
             const order = Math.min(10, Math.max(0, Number(document.getElementById("editOrder").value) || 0));
             const participation = Math.min(10, Math.max(0, Number(document.getElementById("editParticipation").value) || 0));
 
-            if (!name) return;
-
-            if (idVal) {
-                // Update existing
-                const id = Number(idVal);
-                const idx = scoresData.findIndex(s => s.id === id);
-                if (idx !== -1) {
-                    scoresData[idx] = { id, name, game, cheer, order, participation };
-                }
-            } else {
-                // Add new
-                const newId = scoresData.length > 0 ? Math.max(...scoresData.map(s => s.id)) + 1 : 1;
-                scoresData.push({ id: newId, name, game, cheer, order, participation });
+            const idx = scoresData.findIndex(s => s.id === id);
+            if (idx !== -1) {
+                scoresData[idx].game = game;
+                scoresData[idx].cheer = cheer;
+                scoresData[idx].order = order;
+                scoresData[idx].participation = participation;
             }
 
             saveData();
             closeEditModal();
-            showToast("배점 결과가 성공적으로 저장되었습니다.");
+            showToast("점수가 수정되었습니다.");
         }
 
         function deleteItem(id) {
@@ -581,17 +819,17 @@
             const item = scoresData.find(s => s.id === id);
             if (!item) return;
 
-            if (confirm(`'${item.name}' 항목을 삭제하시겠습니까?`)) {
+            if (confirm(`'${item.name}' 학급을 목록에서 삭제하시겠습니까?`)) {
                 scoresData = scoresData.filter(s => s.id !== id);
                 saveData();
-                showToast("항목이 삭제되었습니다.");
+                showToast("삭제되었습니다.");
             }
         }
 
         // --- UTILS ---
-        function showToast(message) {
+        function showToast(msg) {
             const toast = document.getElementById("toast");
-            document.getElementById("toastMsg").innerText = message;
+            document.getElementById("toastMsg").innerText = msg;
             
             toast.classList.remove("translate-y-20", "opacity-0");
             toast.classList.add("translate-y-0", "opacity-100");
@@ -599,7 +837,7 @@
             setTimeout(() => {
                 toast.classList.remove("translate-y-0", "opacity-100");
                 toast.classList.add("translate-y-20", "opacity-0");
-            }, 3000);
+            }, 2500);
         }
 
         function escapeHtml(str) {
@@ -614,7 +852,6 @@
             });
         }
 
-        // --- ON LOAD ---
         window.onload = function() {
             initData();
         };
