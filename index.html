@@ -214,29 +214,23 @@
       color: #1a202c;
     }
 
-    /* 관리자 인증 폼 */
-    .auth-box {
-      text-align: center;
-      padding: 30px 20px;
-    }
-
-    .auth-box input[type="password"] {
-      padding: 12px;
-      width: 220px;
-      border: 2px solid #cbd5e0;
+    .admin-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #edf2f7;
+      padding: 10px 14px;
       border-radius: 10px;
-      font-size: 1rem;
-      outline: none;
-      margin-right: 8px;
+      margin-bottom: 14px;
     }
 
-    .auth-box button {
-      padding: 12px 20px;
+    .admin-btn {
+      padding: 6px 14px;
       background-color: var(--primary-color);
       color: white;
       border: none;
-      border-radius: 10px;
-      font-size: 1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
     }
@@ -274,6 +268,14 @@
       font-weight: 700;
       background: #fff;
       font-size: 0.85rem;
+    }
+
+    .rank-select:disabled {
+      background-color: #f7fafc;
+      color: #2d3748;
+      border: 1px solid #e2e8f0;
+      cursor: not-allowed;
+      opacity: 1;
     }
 
     .total-score-grid {
@@ -388,7 +390,7 @@
     <!-- 메인 탭 메뉴 -->
     <div class="tab-menu">
       <button class="tab-btn active" onclick="switchTab('schedule')">일정</button>
-      <button class="tab-btn" onclick="switchTab('result')">배점 및 결과 (관리자)</button>
+      <button class="tab-btn" onclick="switchTab('result')">배점 및 결과</button>
       <button class="tab-btn" onclick="switchTab('rules')">종목별 규칙</button>
     </div>
 
@@ -404,48 +406,38 @@
 
     <!-- 2. 배점 및 결과 탭 -->
     <div id="tab-result" class="tab-content">
-      <!-- 관리자 인증 영역 -->
-      <div id="admin-auth-container" class="card-box auth-box">
-        <h3>🔒 관리자 전용 영역</h3>
-        <p style="font-size:0.9rem; color:var(--text-sub); margin: 10px 0 15px 0;">배점 입력 및 결과를 확인하려면 비밀번호를 입력해 주세요.</p>
-        <div>
-          <input type="password" id="admin-pass-input" placeholder="비밀번호 입력">
-          <button onclick="checkAdminPassword()">인증</button>
+      <div class="card-box">
+        <!-- 관리자 모드 상태 바 -->
+        <div class="admin-bar">
+          <span id="admin-status-text" style="font-size: 0.85rem; font-weight: 700; color: #4a5568;">🔒 수정 권한: 읽기 전용</span>
+          <button class="admin-btn" id="admin-toggle-btn" onclick="toggleAdminMode()">점수 수정 모드</button>
         </div>
-      </div>
 
-      <!-- 인증 후 나타나는 배점 결과 영역 -->
-      <div id="admin-content-container" style="display: none;">
-        <div class="card-box">
-          <div style="display:flex; justify-shadow:space-between; align-items:center; margin-bottom:12px;">
-            <h3>📊 학년별/반별 배점 종합 점수</h3>
-            <button onclick="lockAdmin()" style="padding:6px 12px; background:#e2e8f0; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">잠금 🔒</button>
-          </div>
+        <h3>📊 학년별/반별 배점 종합 점수</h3>
 
-          <!-- 학년 선택 -->
-          <div class="grade-selector">
-            <button class="grade-btn result-grade-btn active" data-grade="3" onclick="switchResultGrade(3)">3학년</button>
-            <button class="grade-btn result-grade-btn" data-grade="2" onclick="switchResultGrade(2)">2학년</button>
-            <button class="grade-btn result-grade-btn" data-grade="1" onclick="switchResultGrade(1)">1학년</button>
-          </div>
+        <!-- 학년 선택 -->
+        <div class="grade-selector">
+          <button class="grade-btn result-grade-btn active" data-grade="3" onclick="switchResultGrade(3)">3학년</button>
+          <button class="grade-btn result-grade-btn" data-grade="2" onclick="switchResultGrade(2)">2학년</button>
+          <button class="grade-btn result-grade-btn" data-grade="1" onclick="switchResultGrade(1)">1학년</button>
+        </div>
 
-          <div class="table-responsive">
-            <table class="score-table">
-              <thead>
-                <tr id="calc-table-header">
-                  <!-- JS Dynamic Header -->
-                </tr>
-              </thead>
-              <tbody id="calc-table-body">
-                <!-- JS Dynamic Body -->
-              </tbody>
-            </table>
-          </div>
+        <div class="table-responsive">
+          <table class="score-table">
+            <thead>
+              <tr id="calc-table-header">
+                <!-- JS Dynamic Header -->
+              </tr>
+            </thead>
+            <tbody id="calc-table-body">
+              <!-- JS Dynamic Body -->
+            </tbody>
+          </table>
+        </div>
 
-          <h4 style="margin-top: 20px; color:#2d3748;">🏆 최종 실시간 총점 (1~10반)</h4>
-          <div class="total-score-grid" id="total-score-board">
-            <!-- JS Dynamic Total Score Cards -->
-          </div>
+        <h4 style="margin-top: 20px; color:#2d3748;">🏆 최종 실시간 총점 (1~10반)</h4>
+        <div class="total-score-grid" id="total-score-board">
+          <!-- JS Dynamic Total Score Cards -->
         </div>
       </div>
     </div>
@@ -463,7 +455,7 @@
 
   <script>
     /* ===================================================
-       [데이터 정의]
+       [문서 기반 데이터 정의]
        =================================================== */
     const EVENT_DATA = {
       title: "2026학년도 한가람 체육활동",
@@ -473,17 +465,16 @@
       school: "덕소중학교"
     };
 
-    // 암호화/비교용 관리자 비밀번호
     const ADMIN_PW = "050505!";
-    let isAdminAuthenticated = false;
+    let isEditAuthorized = false;
     let selectedResultGrade = 3;
 
-    // 학년별 10개 반 (1~10반) 점수 수집 객체 (3학년, 2학년, 1학년)
+    // 학년별 10개 반(1~10반) 점수 수집 데이터
     const SCORES_DATA = {
       1: {}, 2: {}, 3: {}
     };
 
-    // 타임라인 데이터[cite: 1, 2]
+    // 파일 내 타임라인 데이터[cite: 2]
     const SCHEDULE_DATA = [
       { order: "-", time: "08:50 - 09:00", location: "각 반 교실", grades: { 1: "각반 출석체크 및 운동장 집결 완료", 2: "각반 출석체크 및 운동장 집결 완료", 3: "각반 출석체크 및 운동장 집결 완료" } },
       { order: "-", time: "09:00 - 09:20", location: "운동장", grades: { 1: "<전체 운동장 집결> 개회선언, 준비운동 후 이동", 2: "<전체 운동장 집결> 개회선언, 준비운동 후 이동", 3: "<전체 운동장 집결> 개회선언, 준비운동 후 이동" } },
@@ -497,7 +488,7 @@
       { order: "-", time: "14:15 - 15:00", location: "교내 전역", grades: { 1: "교내정화활동 (봉사시간 인정)", 2: "교내정화활동 (봉사시간 인정)", 3: "교내정화활동 (봉사시간 인정)" } }
     ];
 
-    // 자동 점수 계산용 종목 리스트 (순위별 점수 산정)
+    // 파일 내 종목 및 순위별 배점 데이터[cite: 2]
     const SCORE_CALC_ITEMS = [
       { name: "피구 경기", scores: { 1: 100, 2: 90, 3: 80, 4: 70, 5: 60, 6: 50, 7: 40, 8: 30, 9: 20, 10: 10 } },
       { name: "파이프 연결", scores: { 1: 100, 2: 90, 3: 80, 4: 70, 5: 60, 6: 50, 7: 40, 8: 30, 9: 20, 10: 10 } },
@@ -507,7 +498,7 @@
       { name: "이어달리기 계주", scores: { 1: 150, 2: 135, 3: 120, 4: 105, 5: 90, 6: 75, 7: 60, 8: 45, 9: 30, 10: 15 } }
     ];
 
-    // 종목별 규칙 데이터
+    // 파일 내 종목별 상세 규칙[cite: 2]
     const RULES_DATA = [
       { title: "🏐 전원참여 피구 (체육관)", location: "체육관", content: `• 학급 전원 참가 (남/여 구분 경기 후 합산 점수 반영)\n• 경기 시간: 전반/후반 각 7분\n• 공격 시 아웃된 주자는 상대 진영 외야로 이동\n• 얼굴, 머리 맞출 시 노아웃(공격권 이관)\n• 라인 터치 시 상대편 공격권 이관` },
       { title: "🧩 단체 경기 1: 파이프 연결 (운동장)", location: "운동장", content: `• 반 전체 참가\n• 파이프 반원 관을 서로 이어 붙여 탁구공/골프공을 끊이지 않고 목표 지점까지 이송\n• 공이 바닥에 떨어질 경우 출발선 또는 이전 체크포인트에서 재출발\n• 제한시간 내에 지정된 구역을 통과한 순서대로 순위 결정` },
@@ -520,7 +511,7 @@
     let currentSelectedGrade = 3;
 
     /* ===================================================
-       [초기화 및 로직]
+       [로직 처리]
        =================================================== */
     window.addEventListener("DOMContentLoaded", () => {
       initHeaderInfo();
@@ -528,6 +519,7 @@
       renderSchedule(currentSelectedGrade);
       renderRules();
       initScoresStorage();
+      renderResultTable();
     });
 
     function initHeaderInfo() {
@@ -602,28 +594,27 @@
       });
     }
 
-    /* 관리자 인증 기능 */
-    function checkAdminPassword() {
-      const input = document.getElementById("admin-pass-input").value;
-      if (input === ADMIN_PW) {
-        isAdminAuthenticated = true;
-        document.getElementById("admin-auth-container").style.display = "none";
-        document.getElementById("admin-content-container").style.display = "block";
-        document.getElementById("admin-pass-input").value = "";
+    /* 관리자 / 수정 권한 제어 */
+    function toggleAdminMode() {
+      if (isEditAuthorized) {
+        isEditAuthorized = false;
+        document.getElementById("admin-status-text").innerText = "🔒 수정 권한: 읽기 전용";
+        document.getElementById("admin-toggle-btn").innerText = "점수 수정 모드";
         renderResultTable();
       } else {
-        alert("비밀번호가 올바르지 않습니다.");
-        document.getElementById("admin-pass-input").value = "";
+        const input = prompt("관리자 비밀번호를 입력해 주세요.");
+        if (input === ADMIN_PW) {
+          isEditAuthorized = true;
+          document.getElementById("admin-status-text").innerText = "🔓 수정 권한: 수정 가능";
+          document.getElementById("admin-toggle-btn").innerText = "수정 완료 (잠금)";
+          renderResultTable();
+        } else if (input !== null) {
+          alert("비밀번호가 올바르지 않습니다.");
+        }
       }
     }
 
-    function lockAdmin() {
-      isAdminAuthenticated = false;
-      document.getElementById("admin-auth-container").style.display = "block";
-      document.getElementById("admin-content-container").style.display = "none";
-    }
-
-    /* 점수표 초기화 및 렌더링 */
+    /* 점수 저장 및 테이블 랜더링 */
     function initScoresStorage() {
       [1, 2, 3].forEach(g => {
         SCORE_CALC_ITEMS.forEach((_, itemIdx) => {
@@ -643,13 +634,11 @@
     }
 
     function renderResultTable() {
-      if (!isAdminAuthenticated) return;
-
-      // 헤더 렌더링 (종목명 + 1~10반)
+      // 헤더
       const headerTr = document.getElementById("calc-table-header");
       headerTr.innerHTML = `<th>종목명</th>` + Array.from({length: 10}, (_, i) => `<th>${i+1}반</th>`).join('');
 
-      // 바디 렌더링
+      // 바디 (수정 권한 여부에 따라 disabled 적용)
       const tbody = document.getElementById("calc-table-body");
       tbody.innerHTML = "";
 
@@ -661,7 +650,7 @@
           const currentRank = SCORES_DATA[selectedResultGrade][itemIdx][cls] || 0;
           classOptionsHTML += `
             <td>
-              <select class="rank-select" onchange="updateRank(${selectedResultGrade}, ${itemIdx}, ${cls}, this.value)">
+              <select class="rank-select" ${!isEditAuthorized ? 'disabled' : ''} onchange="updateRank(${selectedResultGrade}, ${itemIdx}, ${cls}, this.value)">
                 <option value="0">선택</option>
                 ${Array.from({length: 10}, (_, r) => `<option value="${r+1}" ${currentRank === (r+1) ? 'selected' : ''}>${r+1}등</option>`).join('')}
               </select>
@@ -677,6 +666,7 @@
     }
 
     function updateRank(grade, itemIdx, cls, rankVal) {
+      if (!isEditAuthorized) return;
       SCORES_DATA[grade][itemIdx][cls] = parseInt(rankVal);
       updateTotalScoresBoard();
     }
