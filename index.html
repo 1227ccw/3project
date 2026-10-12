@@ -1,681 +1,249 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026학년도 한가람 체육활동 안내 사이트</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts (Noto Sans KR) -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800;900&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Noto Sans KR', 'sans-serif'],
-                    },
-                    colors: {
-                        grade1: { DEFAULT: '#10B981', light: '#D1FAE5', dark: '#065F46' }, // 초록
-                        grade2: { DEFAULT: '#F59E0B', light: '#FEF3C7', dark: '#92400E' }, // 주황/노랑
-                        grade3: { DEFAULT: '#6366F1', light: '#E0E7FF', dark: '#3730A3' }, // 보라/파랑
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f8fafc;
-            user-select: none;
-        }
-        .tab-btn.active {
-            background-color: #3b82f6;
-            color: white;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-            transform: translateY(-2px);
-        }
-        .grade-btn.active-g1 {
-            background-color: #10B981;
-            color: white;
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
-        }
-        .grade-btn.active-g2 {
-            background-color: #F59E0B;
-            color: white;
-            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
-        }
-        .grade-btn.active-g3 {
-            background-color: #6366F1;
-            color: white;
-            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(8px);
-        }
-        .pulse-subtle {
-            animation: pulse-slow 3s infinite ease-in-out;
-        }
-        @keyframes pulse-slow {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-    </style>
-</head>
-<body class="text-slate-800 pb-16 min-h-screen flex flex-col justify-between">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026학년도 한가람 체육활동 안내</title>
+  <style>
+    :root {
+      --primary-color: #ff6b6b;
+      --bg-color: #f7f9fc;
+      --card-bg: #ffffff;
+      --text-main: #2c3e50;
+      --text-sub: #7f8c8d;
+      
+      /* 학년별 테마 색상 */
+      --grade3-color: #3f51b5;
+      --grade3-light: #e8eaf6;
+      --grade2-color: #2e7d32;
+      --grade2-light: #e8f5e9;
+      --grade1-color: #e65100;
+      --grade1-light: #fff3e0;
+    }
 
-    <!-- 메인 컨테이너 -->
-    <div class="max-w-4xl mx-auto px-4 py-6 w-full flex-grow">
-        
-        <!-- Top Header & Banner -->
-        <header class="bg-gradient-to-br from-indigo-600 via-blue-600 to-sky-500 rounded-3xl p-6 sm:p-8 text-white shadow-xl mb-6 relative overflow-hidden">
-            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-            <div class="absolute -left-10 -top-10 w-40 h-40 bg-yellow-400/20 rounded-full blur-2xl pointer-events-none"></div>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Pretendard', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
 
-            <div class="flex items-center justify-between gap-2 mb-3">
-                <span class="bg-yellow-400 text-slate-900 font-extrabold text-xs sm:text-sm px-3 py-1 rounded-full shadow-sm flex items-center gap-1">
-                    <i class="fa-solid fa-fire text-red-500"></i> 덕소중 학생회 주관
-                </span>
-                <span class="text-xs sm:text-sm text-sky-100 font-medium">⚡ 중학생 웹개발자 솜씨!</span>
-            </div>
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      align-items: center;
+    }
 
-            <h1 class="text-2xl sm:text-4xl font-black tracking-tight mb-2 leading-tight">
-                2026학년도 한가람 체육활동 🏆
-            </h1>
-            <p class="text-sky-100 text-sm sm:text-base font-medium mb-6">
-                열정과 협동으로 하나 되는 덕소중 한가람 한마당!
-            </p>
+    .container {
+      width: 100%;
+      max-width: 850px;
+      padding: 16px;
+      flex: 1;
+    }
 
-            <!-- D-Day Timer Card -->
-            <div class="bg-white/15 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-white/20 mb-5 text-center shadow-inner">
-                <div class="text-xs sm:text-sm font-semibold text-sky-100 mb-1">🔥 체육대회 개막까지 남은 시간</div>
-                <div id="countdown-display" class="text-xl sm:text-3xl font-black tracking-wider text-yellow-300 font-mono drop-shadow">
-                    D-DAY 계산 중...
-                </div>
-            </div>
+    /* 헤더 & D-Day */
+    header {
+      background: linear-gradient(135deg, #ff8e53, #ff6b6b);
+      color: white;
+      border-radius: 20px;
+      padding: 24px 20px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.25);
+      margin-bottom: 20px;
+    }
 
-            <!-- Basic Info Section -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
-                <div class="bg-black/20 rounded-xl p-2.5 flex items-center gap-2.5">
-                    <i class="fa-solid fa-calendar-check text-yellow-300 text-base"></i>
-                    <div>
-                        <div class="text-sky-200 text-[11px]">일시</div>
-                        <div class="font-bold">2026.10.16 (금)</div>
-                    </div>
-                </div>
-                <div class="bg-black/20 rounded-xl p-2.5 flex items-center gap-2.5">
-                    <i class="fa-solid fa-clock text-yellow-300 text-base"></i>
-                    <div>
-                        <div class="text-sky-200 text-[11px]">시간</div>
-                        <div class="font-bold">09:00 ~ 15:00</div>
-                    </div>
-                </div>
-                <div class="bg-black/20 rounded-xl p-2.5 flex items-center gap-2.5">
-                    <i class="fa-solid fa-location-dot text-yellow-300 text-base"></i>
-                    <div>
-                        <div class="text-sky-200 text-[11px]">장소</div>
-                        <div class="font-bold">운동장 / 체육관 / 각 교실</div>
-                    </div>
-                </div>
-            </div>
-        </header>
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
 
-        <!-- Navigation Tabs -->
-        <nav class="flex bg-slate-200/80 p-1.5 rounded-2xl mb-6 shadow-inner text-sm font-bold gap-1">
-            <button onclick="switchTab('schedule')" id="tab-schedule" class="tab-btn active flex-1 py-3 rounded-xl transition-all duration-200 text-center flex items-center justify-center gap-2 text-slate-600">
-                <i class="fa-solid fa-calendar-days"></i> <span>일정</span>
-            </button>
-            <button onclick="switchTab('result')" id="tab-result" class="tab-btn flex-1 py-3 rounded-xl transition-all duration-200 text-center flex items-center justify-center gap-2 text-slate-600">
-                <i class="fa-solid fa-trophy"></i> <span>점수 및 결과</span>
-            </button>
-            <button onclick="switchTab('rules')" id="tab-rules" class="tab-btn flex-1 py-3 rounded-xl transition-all duration-200 text-center flex items-center justify-center gap-2 text-slate-600">
-                <i class="fa-solid fa-book-bookmark"></i> <span>종목 규칙</span>
-            </button>
-        </nav>
+    header .event-info {
+      font-size: 0.95rem;
+      opacity: 0.95;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
 
-        <!-- TAB 1: SCHEDULE -->
-        <section id="content-schedule" class="tab-content block">
-            <!-- Grade Filter Selector -->
-            <div class="flex justify-center gap-2 mb-6">
-                <button onclick="selectGrade(1)" id="btn-grade-1" class="grade-btn active-g1 px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all flex items-center gap-1.5 shadow-sm">
-                    <span>🌱 1학년</span>
-                </button>
-                <button onclick="selectGrade(2)" id="btn-grade-2" class="grade-btn px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all bg-white text-slate-600 hover:bg-slate-100 flex items-center gap-1.5 shadow-sm">
-                    <span>🔥 2학년</span>
-                </button>
-                <button onclick="selectGrade(3)" id="btn-grade-3" class="grade-btn px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all bg-white text-slate-600 hover:bg-slate-100 flex items-center gap-1.5 shadow-sm">
-                    <span>⚡ 3학년</span>
-                </button>
-            </div>
+    .dday-badge {
+      display: inline-block;
+      background-color: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(5px);
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
 
-            <!-- Grade Info Notice -->
-            <div id="grade-banner" class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-4 mb-4 text-emerald-800 flex justify-between items-center">
-                <div class="font-bold text-sm sm:text-base" id="grade-title">🌱 1학년 경기 타임테이블</div>
-                <span class="text-xs bg-emerald-200 text-emerald-900 font-black px-2.5 py-1 rounded-lg">학년 컬러 적용</span>
-            </div>
+    /* 탭 메뉴 */
+    .tab-menu {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      background-color: #e2e8f0;
+      padding: 6px;
+      border-radius: 14px;
+    }
 
-            <!-- Schedule List Container -->
-            <div id="schedule-list" class="space-y-3">
-                <!-- Dynamically rendered by JS -->
-            </div>
-        </section>
+    .tab-btn {
+      flex: 1;
+      padding: 12px 0;
+      border: none;
+      background: none;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-sub);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
 
-        <!-- TAB 2: SCORES & LEADERBOARD -->
-        <section id="content-result" class="tab-content hidden">
-            <!-- Rank Leaderboard Banner -->
-            <div class="bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-900 rounded-2xl p-5 mb-6 shadow-md">
-                <h2 class="text-lg sm:text-xl font-black mb-1 flex items-center gap-2">
-                    <i class="fa-solid fa-crown text-2xl text-white drop-shadow"></i> 실시간 학년 종합 순위표
-                </h2>
-                <p class="text-xs sm:text-sm font-semibold opacity-90">아래 종목별 순위를 입력하면 종합 점수와 순위가 자동 계산돼요!</p>
-            </div>
+    .tab-btn.active {
+      background-color: white;
+      color: var(--primary-color);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
 
-            <!-- Leaderboard Cards (Generated dynamically) -->
-            <div id="leaderboard-cards" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-                <!-- Dynamically rendered -->
-            </div>
+    .tab-content {
+      display: none;
+    }
 
-            <!-- Match Score Input Forms -->
-            <div class="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-sm mb-6">
-                <h3 class="text-base sm:text-lg font-black text-slate-800 mb-4 flex items-center gap-2 border-b pb-3">
-                    <i class="fa-solid fa-pen-to-square text-blue-500"></i> 종목별 순위 및 응원점수 입력
-                </h3>
+    .tab-content.active {
+      display: block;
+    }
 
-                <div id="event-score-inputs" class="space-y-4">
-                    <!-- Dynamically rendered -->
-                </div>
-            </div>
+    /* 학년 선택 버튼 */
+    .grade-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
 
-            <!-- Point Rule Explanation Box -->
-            <div class="bg-slate-100 rounded-xl p-4 text-xs sm:text-sm text-slate-600 border border-slate-200">
-                <div class="font-bold text-slate-700 mb-1"><i class="fa-solid fa-circle-info text-blue-500"></i> 점수 산정 방식</div>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center mt-2 font-semibold">
-                    <div class="bg-white py-1.5 px-2 rounded-lg border">🥇 1등: <span class="text-blue-600">100점</span></div>
-                    <div class="bg-white py-1.5 px-2 rounded-lg border">🥈 2등: <span class="text-blue-600">70점</span></div>
-                    <div class="bg-white py-1.5 px-2 rounded-lg border">🥉 3등: <span class="text-blue-600">50점</span></div>
-                    <div class="bg-white py-1.5 px-2 rounded-lg border">🏅 4등: <span class="text-blue-600">30점</span></div>
-                </div>
-            </div>
-        </section>
+    .grade-btn {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      background-color: #edf2f7;
+      color: var(--text-sub);
+      transition: all 0.2s ease;
+    }
 
-        <!-- TAB 3: RULES -->
-        <section id="content-rules" class="tab-content hidden">
-            <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-4 mb-6 text-indigo-900">
-                <h2 class="font-bold text-sm sm:text-base flex items-center gap-2">
-                    <i class="fa-solid fa-shield-halved text-indigo-600"></i> 안전하고 공정한 한가람 체육활동!
-                </h2>
-                <p class="text-xs sm:text-sm text-indigo-700 mt-0.5">종목 카드를 클릭하여 상세 규칙과 주의사항을 확인하세요.</p>
-            </div>
+    .grade-btn[data-grade="3"].active {
+      background-color: var(--grade3-light);
+      color: var(--grade3-color);
+      border-color: var(--grade3-color);
+    }
+    .grade-btn[data-grade="2"].active {
+      background-color: var(--grade2-light);
+      color: var(--grade2-color);
+      border-color: var(--grade2-color);
+    }
+    .grade-btn[data-grade="1"].active {
+      background-color: var(--grade1-light);
+      color: var(--grade1-color);
+      border-color: var(--grade1-color);
+    }
 
-            <!-- Rules Grid -->
-            <div id="rules-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Dynamically rendered -->
-            </div>
-        </section>
-    </div>
+    /* 타임라인 스타일 */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
-    <!-- Footer Section -->
-    <footer class="mt-12 bg-slate-900 text-slate-400 py-8 text-center text-xs sm:text-sm">
-        <div class="max-w-4xl mx-auto px-4 space-y-2">
-            <div class="font-bold text-slate-200 text-base">🏫 덕소중학교 (Dukso Middle School)</div>
-            <p>2026학년도 한가람 체육활동 안내 시스템 | 제작: 덕소중 Student Developer</p>
-            <p class="text-slate-500 text-[11px]">본 페이지는 HTML, CSS, JavaScript로 제작된 단일 페이지 웹 앱입니다.</p>
-        </div>
-    </footer>
+    .timeline-item {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-left: 6px solid #cbd5e0;
+    }
 
-    <script>
-        /* ==========================================================================
-           [1] DATA ARCHITECTURE (전체 데이터 구조)
-           - 데이터를 수정하면 모든 화면(시간표, 점수, 순위, 규칙)이 자동으로 변합니다!
-           ========================================================================== */
-        
-        // 1. 학년별 시간표 데이터
-        const SCHEDULE_DATA = [
-            {
-                grade: 1,
-                theme: { bg: 'bg-emerald-500', light: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
-                items: [
-                    { time: '09:00 - 09:30', title: '개회식 및 준비운동', location: '운동장', match: '전체 학년' },
-                    { time: '09:40 - 10:30', title: '피구 예선전', location: '체육관', match: '1반 vs 2반 / 3반 vs 4반' },
-                    { time: '10:40 - 11:30', title: '단체줄넘기', location: '운동장', match: '1~4반 전체' },
-                    { time: '11:40 - 12:30', title: '줄다리기 예선', location: '운동장', match: '1반 vs 3반 / 2반 vs 4반' },
-                    { time: '12:30 - 13:30', title: '🍱 점심시간 및 응원전', location: '각 반 교실', match: '전체 학년' },
-                    { time: '13:40 - 14:20', title: '릴레이 계주 결승', location: '운동장 트랙', match: '각 반 대표선수' },
-                    { time: '14:30 - 15:00', title: '폐회식 및 시상식', location: '운동장', match: '전체 학년' },
-                ]
-            },
-            {
-                grade: 2,
-                theme: { bg: 'bg-amber-500', light: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
-                items: [
-                    { time: '09:00 - 09:30', title: '개회식 및 준비운동', location: '운동장', match: '전체 학년' },
-                    { time: '09:40 - 10:30', title: '풋살 예선전', location: '운동장', match: '1반 vs 4반 / 2반 vs 3반' },
-                    { time: '10:40 - 11:30', title: '판 뒤집기 토너먼트', location: '체육관', match: '전 학급 참가' },
-                    { time: '11:40 - 12:30', title: '피구 결승전', location: '체육관', match: '예선 승리 학급' },
-                    { time: '12:30 - 13:30', title: '🍱 점심시간 및 응원전', location: '각 반 교실', match: '전체 학년' },
-                    { time: '13:40 - 14:20', title: '릴레이 계주 결승', location: '운동장 트랙', match: '각 반 대표선수' },
-                    { time: '14:30 - 15:00', title: '폐회식 및 시상식', location: '운동장', match: '전체 학년' },
-                ]
-            },
-            {
-                grade: 3,
-                theme: { bg: 'bg-indigo-500', light: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200' },
-                items: [
-                    { time: '09:00 - 09:30', title: '개회식 및 준비운동', location: '운동장', match: '전체 학년' },
-                    { time: '09:40 - 10:30', title: '줄다리기 결승전', location: '운동장', match: '3학년 전체 반' },
-                    { time: '10:40 - 11:30', title: '풋살 결승전', location: '운동장', match: '3학년 대표팀' },
-                    { time: '11:40 - 12:30', title: '단체줄넘기 & 피구', location: '체육관', match: '3학년 전 학급' },
-                    { time: '12:30 - 13:30', title: '🍱 점심시간 및 응원전', location: '각 반 교실', match: '전체 학년' },
-                    { time: '13:40 - 14:20', title: '릴레이 계주 결승', location: '운동장 트랙', match: '각 반 대표선수' },
-                    { time: '14:30 - 15:00', title: '폐회식 및 시상식', location: '운동장', match: '전체 학년' },
-                ]
-            }
-        ];
+    .timeline-item.grade-3 { border-left-color: var(--grade3-color); }
+    .timeline-item.grade-2 { border-left-color: var(--grade2-color); }
+    .timeline-item.grade-1 { border-left-color: var(--grade1-color); }
 
-        // 2. 학급 리스트 및 초기 배점 규칙
-        const CLASSES = ['1반', '2반', '3반', '4반'];
+    .time-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
 
-        const SCORE_TABLE = {
-            1: 100, // 1등
-            2: 70,  // 2등
-            3: 50,  // 3등
-            4: 30   // 4등
-        };
+    .location-tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      background-color: #edf2f7;
+      color: #4a5568;
+    }
 
-        // 종목별 순위 상태 저장 (기초 설정)
-        let EVENT_SCORES = [
-            { id: 'relay', name: '🏃‍♂️ 릴레이 계주', ranks: { '1반': 1, '2반': 2, '3반': 3, '4반': 4 } },
-            { id: 'tug', name: '🚩 줄다리기', ranks: { '1반': 2, '2반': 1, '3반': 4, '4반': 3 } },
-            { id: 'rope', name: '🪢 단체줄넘기', ranks: { '1반': 3, '2반': 4, '3반': 1, '4반': 2 } },
-            { id: 'dodge', name: '🤾‍♂️ 피구', ranks: { '1반': 1, '2반': 3, '3반': 2, '4반': 4 } },
-            { id: 'futsal', name: '⚽ 풋살', ranks: { '1반': 4, '2반': 2, '3반': 1, '4반': 3 } },
-        ];
+    .event-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
 
-        // 응원 점수 상태
-        let CHEER_SCORES = {
-            '1반': 40,
-            '2반': 50,
-            '3반': 30,
-            '4반': 45
-        };
+    /* 점수표 & 결과 계산 탭 */
+    .card-box {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      margin-bottom: 20px;
+    }
 
-        // 3. 종목별 상세 규칙 데이터
-        const EVENT_RULES = [
-            {
-                id: 'relay',
-                name: '🏃‍♂️ 릴레이 계주',
-                icon: 'fa-person-running',
-                tag: '메인 경기',
-                players: '학급당 남녀 각 4명 (총 8명)',
-                rules: [
-                    '바통 터치는 정해진 바통 존(20m) 안에서만 완료해야 합니다.',
-                    '바통을 떨어뜨릴 경우, 떨어뜨린 선수가 직접 주워서 경기를 재개합니다.',
-                    '타 학급 선수의 진로를 고의로 방해하면 실격 처리됩니다.'
-                ],
-                safety: '운동화 끈을 단단히 묶고, 코너링 시 넘어지지 않도록 주의하세요.'
-            },
-            {
-                id: 'tug',
-                name: '🚩 줄다리기',
-                icon: 'fa-people-pulling',
-                tag: '단합 경기',
-                players: '학급 전체 (선수 20명)',
-                rules: [
-                    '신호음이 울리기 전에 줄을 미리 당기면 경고 조치됩니다.',
-                    '줄을 몸이나 장갑에 감아서 당기는 행위는 엄격히 금지됩니다.',
-                    '중앙 표시선이 자신 쪽 2m 지점까지 먼저 들어오면 승리합니다 (3판 2선승).'
-                ],
-                safety: '손바닥 보호용 미끄럼 방지 장갑을 반드시 착용하세요.'
-            },
-            {
-                id: 'rope',
-                name: '🪢 단체줄넘기',
-                icon: 'fa-bolt',
-                tag: '기록 경기',
-                players: '줄돌리기 2명 + 뛰기 10명',
-                rules: [
-                    '2분 동안 걸리지 않고 연속으로 가장 많이 뛴 횟수를 기록합니다.',
-                    '총 2회 시도하여 더 높은 기록을 최종 점수로 인정합니다.',
-                    '걸렸을 때는 0부터 다시 카운트합니다.'
-                ],
-                safety: '줄에 걸려 걸려 넘어질 수 있으니 적정한 간격을 유지하세요.'
-            },
-            {
-                id: 'dodge',
-                name: '🤾‍♂️ 피구',
-                icon: 'fa-volleyball',
-                tag: '구기 종목',
-                players: '학급당 12명 (내야 10명, 외야 2명)',
-                rules: [
-                    '공에 맞은 선수는 즉시 외야로 이동합니다.',
-                    '공을 바운드 없이 직접 캐치하면 공격권이 유지되며 아웃되지 않습니다.',
-                    '얼굴 및 머리 맞추기(헤드샷)는 금지되며, 공격자 경고 및 상대 공권 부여됩니다.'
-                ],
-                safety: '안전 피구공(말랑한 재질)을 사용합니다.'
-            },
-            {
-                id: 'futsal',
-                name: '⚽ 풋살',
-                icon: 'fa-futbol',
-                tag: '구기 종목',
-                players: '5인제 (필드 4명 + 골키퍼 1명)',
-                rules: [
-                    '전/후반 각 10분으로 진행됩니다.',
-                    '슬라이딩 태클은 위험 요소 방지를 위해 금지됩니다.',
-                    '무승부 시 승부차기(각 3명)로 승패를 결정합니다.'
-                ],
-                safety: '정경골 보호대(신가드) 착용을 권장하며 축구화(뽕) 금지, 운동화 착용.'
-            },
-            {
-                id: 'flip',
-                name: '🟧 판 뒤집기',
-                icon: 'fa-table-cells-large',
-                tag: '이벤트 경기',
-                players: '학급 전체',
-                rules: [
-                    '제한시간 90초 동안 자신의 학급 색상 판이 위로 오도록 뒤집습니다.',
-                    '종료 신호가 울리면 손을 떼고 즉시 제자리에 앉아야 합니다.',
-                    '상대방을 밀치거나 공작하는 행위는 감점 대상입니다.'
-                ],
-                safety: '무릎 보호 및 충돌 방지를 위해 체육관 매트 위에서 진행됩니다.'
-            }
-        ];
+    .card-box h3 {
+      margin-bottom: 8px;
+      font-size: 1.15rem;
+      color: #1a202c;
+    }
 
-        /* ==========================================================================
-           [2] TIMER & CORE LOGIC (D-Day 타이머 및 탭 전환)
-           ========================================================================== */
-        
-        // D-Day 실시간 카운트다운
-        function updateCountdown() {
-            const targetDate = new Date('2026-10-16T09:00:00+09:00').getTime();
-            const now = new Date().getTime();
-            const diff = targetDate - now;
+    .score-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
 
-            const displayEl = document.getElementById('countdown-display');
+    .score-table th, .score-table td {
+      padding: 10px 8px;
+      text-align: center;
+      border-bottom: 1px solid #edf2f7;
+      font-size: 0.88rem;
+    }
 
-            if (diff <= 0) {
-                displayEl.innerHTML = "🎉 TODAY! 한가람 체육활동 진행 중! 🎉";
-                return;
-            }
+    .score-table th {
+      background-color: #f8fafc;
+      font-weight: 700;
+      color: #4a5568;
+    }
 
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    .rank-select {
+      width: 100%;
+      padding: 6px;
+      border: 1px solid #cbd5e0;
+      border-radius: 6px;
+      font-weight: 700;
+      background: #fff;
+    }
 
-            displayEl.innerHTML = `D-${days} <span class="text-sm sm:text-xl font-normal text-white font-sans ml-1">(${days}일 ${hours}시간 ${minutes}분 ${seconds}초 남음)</span>`;
-        }
-
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        // 탭 전환 기능
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-
-            document.getElementById(`content-${tabName}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-        }
-
-        /* ==========================================================================
-           [3] TAB 1: SCHEDULE RENDERING (시간표 렌더링)
-           ========================================================================== */
-        let currentGrade = 1;
-
-        function selectGrade(grade) {
-            currentGrade = grade;
-            
-            // 버튼 스타일 업데이트
-            [1, 2, 3].forEach(g => {
-                const btn = document.getElementById(`btn-grade-${g}`);
-                btn.className = `grade-btn px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all shadow-sm ${
-                    g === grade 
-                    ? (g === 1 ? 'active-g1' : g === 2 ? 'active-g2' : 'active-g3')
-                    : 'bg-white text-slate-600 hover:bg-slate-100'
-                }`;
-            });
-
-            renderSchedule();
-        }
-
-        function renderSchedule() {
-            const gradeData = SCHEDULE_DATA.find(d => d.grade === currentGrade);
-            const container = document.getElementById('schedule-list');
-            const banner = document.getElementById('grade-banner');
-            const title = document.getElementById('grade-title');
-
-            // 학년별 배너 테마 설정
-            if (currentGrade === 1) {
-                banner.className = 'bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-4 mb-4 text-emerald-800 flex justify-between items-center';
-                title.innerText = '🌱 1학년 경기 타임테이블';
-            } else if (currentGrade === 2) {
-                banner.className = 'bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 mb-4 text-amber-800 flex justify-between items-center';
-                title.innerText = '🔥 2학년 경기 타임테이블';
-            } else {
-                banner.className = 'bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-4 mb-4 text-indigo-800 flex justify-between items-center';
-                title.innerText = '⚡ 3학년 경기 타임테이블';
-            }
-
-            container.innerHTML = gradeData.items.map(item => `
-                <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div class="flex items-center gap-3">
-                        <span class="bg-slate-100 text-slate-700 font-mono font-bold text-xs sm:text-sm px-3 py-1.5 rounded-xl border border-slate-200 shrink-0">
-                            <i class="fa-regular fa-clock mr-1"></i>${item.time}
-                        </span>
-                        <div>
-                            <h4 class="font-black text-slate-800 text-base sm:text-lg">${item.title}</h4>
-                            <p class="text-xs sm:text-sm text-slate-500 font-medium">${item.match}</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 self-start sm:self-center">
-                        <span class="text-xs font-bold px-3 py-1 rounded-full ${
-                            item.location.includes('운동장') ? 'bg-amber-100 text-amber-800' : 
-                            item.location.includes('체육관') ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-700'
-                        }">
-                            📍 ${item.location}
-                        </span>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        /* ==========================================================================
-           [4] TAB 2: SCORE & LEADERBOARD CALCULATION (점수 자동 계산 엔진)
-           ========================================================================== */
-        
-        function calculateScores() {
-            // 각 학급별 총점 초기화
-            const totals = { '1반': 0, '2반': 0, '3반': 0, '4반': 0 };
-
-            // 1. 종목별 순위에 따른 점수 합산
-            EVENT_SCORES.forEach(event => {
-                CLASSES.forEach(c => {
-                    const rank = event.ranks[c];
-                    const pts = SCORE_TABLE[rank] || 0;
-                    totals[c] += pts;
-                });
-            });
-
-            // 2. 응원 점수 합산
-            CLASSES.forEach(c => {
-                totals[c] += (parseInt(CHEER_SCORES[c]) || 0);
-            });
-
-            // 3. 점수 순으로 순위 정렬
-            const sorted = CLASSES.map(c => ({
-                className: c,
-                score: totals[c]
-            })).sort((a, b) => b.score - a.score);
-
-            // 동점 처리 고려한 순위 매기기
-            let currentRank = 1;
-            sorted.forEach((item, index) => {
-                if (index > 0 && item.score < sorted[index - 1].score) {
-                    currentRank = index + 1;
-                }
-                item.rank = currentRank;
-            });
-
-            renderLeaderboard(sorted);
-        }
-
-        function renderLeaderboard(sortedList) {
-            const container = document.getElementById('leaderboard-cards');
-            
-            const badges = {
-                1: { title: '🥇 1위 (선두)', bg: 'bg-gradient-to-br from-yellow-400 to-amber-500 text-white', border: 'border-yellow-300' },
-                2: { title: '🥈 2위', bg: 'bg-gradient-to-br from-slate-200 to-slate-400 text-slate-900', border: 'border-slate-300' },
-                3: { title: '🥉 3위', bg: 'bg-gradient-to-br from-amber-600 to-amber-700 text-white', border: 'border-amber-500' },
-                4: { title: '🏅 4위', bg: 'bg-white text-slate-700', border: 'border-slate-200' },
-            };
-
-            // 순위별 상단 카드 구성
-            container.innerHTML = sortedList.map(item => {
-                const badge = badges[item.rank] || badges[4];
-                return `
-                    <div class="${badge.bg} rounded-2xl p-4 border-2 ${badge.border} shadow-sm flex flex-col items-center justify-center text-center transition-all duration-300">
-                        <span class="text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-black/10 mb-1">
-                            ${badge.title}
-                        </span>
-                        <div class="text-2xl sm:text-3xl font-black my-1">${item.className}</div>
-                        <div class="text-lg sm:text-2xl font-extrabold font-mono">${item.score}<span class="text-xs font-normal">점</span></div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderScoreInputs() {
-            const container = document.getElementById('event-score-inputs');
-
-            let html = EVENT_SCORES.map((event, idx) => `
-                <div class="bg-slate-50 rounded-xl p-3 sm:p-4 border border-slate-200">
-                    <div class="font-bold text-slate-800 text-sm sm:text-base mb-2.5 flex items-center justify-between">
-                        <span>${event.name}</span>
-                        <span class="text-xs font-normal text-slate-500">각 반 순위 지정</span>
-                    </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                        ${CLASSES.map(c => `
-                            <div class="flex items-center justify-between bg-white px-3 py-2 rounded-lg border text-xs sm:text-sm">
-                                <span class="font-bold text-slate-700">${c}</span>
-                                <select onchange="updateRank('${event.id}', '${c}', this.value)" class="bg-slate-100 font-bold border rounded px-1.5 py-1 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="1" ${event.ranks[c] == 1 ? 'selected' : ''}>1등 (100점)</option>
-                                    <option value="2" ${event.ranks[c] == 2 ? 'selected' : ''}>2등 (70점)</option>
-                                    <option value="3" ${event.ranks[c] == 3 ? 'selected' : ''}>3등 (50점)</option>
-                                    <option value="4" ${event.ranks[c] == 4 ? 'selected' : ''}>4등 (30점)</option>
-                                </select>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `).join('');
-
-            // 응원 점수 입력란 추가
-            html += `
-                <div class="bg-pink-50 rounded-xl p-3 sm:p-4 border border-pink-200 mt-4">
-                    <div class="font-bold text-pink-900 text-sm sm:text-base mb-2.5 flex items-center gap-2">
-                        <i class="fa-solid fa-bullhorn text-pink-500"></i> 🎉 학급별 응원 점수 (보너스)
-                    </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                        ${CLASSES.map(c => `
-                            <div class="flex items-center justify-between bg-white px-3 py-2 rounded-lg border text-xs sm:text-sm">
-                                <span class="font-bold text-slate-700">${c}</span>
-                                <input type="number" value="${CHEER_SCORES[c]}" onchange="updateCheerScore('${c}', this.value)" min="0" max="100" class="w-16 bg-slate-100 font-bold border rounded px-2 py-1 text-right text-slate-800 focus:outline-none focus:ring-2 focus:ring-pink-500">
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-
-            container.innerHTML = html;
-        }
-
-        function updateRank(eventId, className, rankValue) {
-            const event = EVENT_SCORES.find(e => e.id === eventId);
-            if (event) {
-                event.ranks[className] = parseInt(rankValue);
-                calculateScores();
-            }
-        }
-
-        function updateCheerScore(className, val) {
-            CHEER_SCORES[className] = parseInt(val) || 0;
-            calculateScores();
-        }
-
-        /* ==========================================================================
-           [5] TAB 3: RULES RENDERING & TOGGLE (종목 규칙 렌더링)
-           ========================================================================== */
-        
-        function renderRules() {
-            const container = document.getElementById('rules-grid');
-
-            container.innerHTML = EVENT_RULES.map((rule, idx) => `
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-200 hover:border-indigo-300">
-                    <button onclick="toggleRuleDetail(${idx})" class="w-full text-left p-4 sm:p-5 flex items-center justify-between gap-3 bg-white hover:bg-slate-50 transition-colors">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-lg shrink-0">
-                                <i class="fa-solid ${rule.icon}"></i>
-                            </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <h3 class="font-black text-slate-800 text-base sm:text-lg">${rule.name}</h3>
-                                    <span class="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-bold">${rule.tag}</span>
-                                </div>
-                                <p class="text-xs text-slate-500 font-medium mt-0.5">인원: ${rule.players}</p>
-                            </div>
-                        </div>
-                        <i id="rule-icon-${idx}" class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
-                    </button>
-
-                    <!-- Hidden Detail Panel -->
-                    <div id="rule-detail-${idx}" class="hidden bg-slate-50 p-4 sm:p-5 border-t border-slate-100 text-xs sm:text-sm space-y-3">
-                        <div>
-                            <div class="font-bold text-slate-700 mb-1 flex items-center gap-1.5">
-                                <i class="fa-solid fa-list-check text-indigo-500"></i> 주요 경기 규칙
-                            </div>
-                            <ul class="list-disc list-inside text-slate-600 space-y-1 pl-1">
-                                ${rule.rules.map(r => `<li>${r}</li>`).join('')}
-                            </ul>
-                        </div>
-                        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-amber-900">
-                            <div class="font-bold text-xs flex items-center gap-1 mb-0.5">
-                                <i class="fa-solid fa-triangle-exclamation text-amber-600"></i> 안전 수칙 & 페널티
-                            </div>
-                            <p class="text-xs text-amber-800">${rule.safety}</p>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function toggleRuleDetail(idx) {
-            const detail = document.getElementById(`rule-detail-${idx}`);
-            const icon = document.getElementById(`rule-icon-${idx}`);
-
-            if (detail.classList.contains('hidden')) {
-                detail.classList.remove('hidden');
-                icon.style.transform = 'rotate(180deg)';
-            } else {
-                detail.classList.add('hidden');
-                icon.style.transform = 'rotate(0deg)';
-            }
-        }
-
-        /* ==========================================================================
-           [6] INITIALIZATION (앱 시작)
-           ========================================================================== */
-        window.onload = function() {
-            renderSchedule();
-            renderScoreInputs();
-            calculateScores();
-            renderRules();
-        };
-    </script>
-</body>
-</html>
+    .total-score-board {
+      display: flex;
+      gap: 10px;
+      margin-top: 15
