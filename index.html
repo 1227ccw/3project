@@ -1,607 +1,623 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2026학년도 한가람 체육활동 안내</title>
-  <style>
-    /* ===================================================
-       1. 기본 스타일 및 변수 정의 (밝고 활기찬 분위기)
-       =================================================== */
-    :root {
-      --primary-color: #ff6b6b;
-      --bg-color: #f7f9fc;
-      --card-bg: #ffffff;
-      --text-main: #2c3e50;
-      --text-sub: #7f8c8d;
-      
-      /* 학년별 테마 색상 (3학년: 파랑, 2학년: 초록, 1학년: 주황) */
-      --grade3-color: #3f51b5;
-      --grade3-light: #e8eaf6;
-      --grade2-color: #2e7d32;
-      --grade2-light: #e8f5e9;
-      --grade1-color: #e65100;
-      --grade1-light: #fff3e0;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Pretendard', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      align-items: center;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 800px;
-      padding: 16px;
-      flex: 1;
-    }
-
-    /* ===================================================
-       2. 헤더 및 D-Day 카운트다운
-       =================================================== */
-    header {
-      background: linear-gradient(135deg, #ff8e53, #ff6b6b);
-      color: white;
-      border-radius: 20px;
-      padding: 24px 20px;
-      text-align: center;
-      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.25);
-      margin-bottom: 20px;
-    }
-
-    header h1 {
-      font-size: 1.6rem;
-      font-weight: 800;
-      margin-bottom: 8px;
-      letter-spacing: -0.5px;
-    }
-
-    header .event-info {
-      font-size: 0.95rem;
-      opacity: 0.95;
-      margin-bottom: 16px;
-    }
-
-    .dday-badge {
-      display: inline-block;
-      background-color: rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(5px);
-      padding: 8px 18px;
-      border-radius: 50px;
-      font-size: 1.2rem;
-      font-weight: 700;
-      border: 1px solid rgba(255, 255, 255, 0.4);
-    }
-
-    /* ===================================================
-       3. 메인 탭 메뉴
-       =================================================== */
-    .tab-menu {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-      background-color: #e2e8f0;
-      padding: 6px;
-      border-radius: 14px;
-    }
-
-    .tab-btn {
-      flex: 1;
-      padding: 12px 0;
-      border: none;
-      background: none;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text-sub);
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-    }
-
-    .tab-btn.active {
-      background-color: white;
-      color: var(--primary-color);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    /* ===================================================
-       4. 일정 탭 스타일 (학년 선택 & 서브 탭)
-       =================================================== */
-    .grade-selector {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .grade-btn {
-      flex: 1;
-      padding: 10px;
-      border: 2px solid transparent;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      background-color: #edf2f7;
-      color: var(--text-sub);
-      transition: all 0.2s ease;
-    }
-
-    .grade-btn[data-grade="3"].active {
-      background-color: var(--grade3-light);
-      color: var(--grade3-color);
-      border-color: var(--grade3-color);
-    }
-    .grade-btn[data-grade="2"].active {
-      background-color: var(--grade2-light);
-      color: var(--grade2-color);
-      border-color: var(--grade2-color);
-    }
-    .grade-btn[data-grade="1"].active {
-      background-color: var(--grade1-light);
-      color: var(--grade1-color);
-      border-color: var(--grade1-color);
-    }
-
-    .timeline {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .timeline-item {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      border-left: 5px solid #cbd5e0;
-    }
-
-    /* 학년별 대표 카드 서식 */
-    .timeline-item.grade-3 { border-left-color: var(--grade3-color); }
-    .timeline-item.grade-2 { border-left-color: var(--grade2-color); }
-    .timeline-item.grade-1 { border-left-color: var(--grade1-color); }
-
-    .time-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.9rem;
-      color: var(--text-sub);
-      font-weight: 600;
-    }
-
-    .location-tag {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      background-color: #edf2f7;
-      color: #4a5568;
-    }
-
-    .event-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text-main);
-      line-height: 1.4;
-    }
-
-    /* ===================================================
-       5. 결과 탭 (점수 자동 계산)
-       =================================================== */
-    .score-card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      margin-bottom: 20px;
-    }
-
-    .score-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-    }
-
-    .score-table th, .score-table td {
-      padding: 10px;
-      text-align: center;
-      border-bottom: 1px solid #edf2f7;
-      font-size: 0.9rem;
-    }
-
-    .score-table th {
-      background-color: #f8fafc;
-      font-weight: 700;
-    }
-
-    .score-input {
-      width: 50px;
-      padding: 6px;
-      text-align: center;
-      border: 1px solid #cbd5e0;
-      border-radius: 6px;
-      font-weight: 700;
-    }
-
-    .total-score {
-      font-weight: 800;
-      color: var(--primary-color);
-      font-size: 1.05rem;
-    }
-
-    /* ===================================================
-       6. 규칙 탭
-       =================================================== */
-    .rule-accordion {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .rule-item {
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-    }
-
-    .rule-header {
-      padding: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #fff;
-    }
-
-    .rule-content {
-      display: none;
-      padding: 16px;
-      background-color: #f8fafc;
-      border-top: 1px solid #edf2f7;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: #4a5568;
-    }
-
-    .rule-item.active .rule-content {
-      display: block;
-    }
-
-    /* ===================================================
-       7. 하단 푸터
-       =================================================== */
-    footer {
-      text-align: center;
-      padding: 24px;
-      color: var(--text-sub);
-      font-size: 0.85rem;
-      font-weight: 600;
-      width: 100%;
-    }
-
-    /* PC 최적화 (큰 화면 지원) */
-    @media (min-width: 768px) {
-      header h1 { font-size: 2.2rem; }
-      .event-title { font-size: 1.25rem; }
-      .container { padding: 24px; }
-      .tab-btn { font-size: 1.1rem; padding: 14px 0; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한가람 체육활동 배점 결과 관리</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        /* Custom Scrollbar for tables */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
 
-  <div class="container">
-    <!-- 헤더 영역 -->
-    <header>
-      <h1 id="event-title"></h1>
-      <div class="event-info" id="event-info"></div>
-      <div class="dday-badge" id="dday-badge">D-DAY 계산 중...</div>
+    <!-- Header / Navbar -->
+    <header class="bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 text-white shadow-lg sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2.5 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
+                        <i class="fa-solid font-bold fa-trophy text-amber-300 text-2xl sm:text-3xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white">한가람 체육활동 배점 결과</h1>
+                        <p class="text-xs sm:text-sm text-blue-100 font-medium">전체 종합 순위 및 항목별 실시간 배점 현황</p>
+                    </div>
+                </div>
+
+                <!-- Admin Auth Controls -->
+                <div class="flex items-center space-x-3 self-end md:self-auto">
+                    <span id="modeBadge" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30">
+                        <i class="fa-solid fa-eye text-xs"></i> 일반 조회 모드
+                    </span>
+                    <button id="authBtn" onclick="toggleAuthModal()" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-medium px-4 py-2 rounded-xl text-sm transition-all duration-200 backdrop-blur-md border border-white/20 hover:shadow-md">
+                        <i id="authIcon" class="fa-solid fa-lock"></i>
+                        <span id="authBtnText">관리자 로그인</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <!-- 메인 탭 메뉴 -->
-    <div class="tab-menu">
-      <button class="tab-btn active" onclick="switchTab('schedule')">일정</button>
-      <button class="tab-btn" onclick="switchTab('result')">배점 결과</button>
-      <button class="tab-btn" onclick="switchTab('rules')">규칙</button>
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- Top 3 Podium Cards -->
+        <section class="space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-crown text-amber-500"></i> TOP 3 명예의 전당
+                </h2>
+                <span class="text-xs text-slate-500">최상위 3개 학급 명단</span>
+            </div>
+
+            <div id="podiumCards" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Javascript will dynamically inject Top 1, 2, 3 here -->
+            </div>
+        </section>
+
+        <!-- Full Results Table Section -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
+            <!-- Table Header Controls -->
+            <div class="p-5 bg-slate-50/80 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                        <i class="fa-solid fa-list-ol text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">전체 순위 및 배점 결과표</h3>
+                        <p class="text-xs text-slate-500">모든 참가 학급의 상세 배점 결과를 확인합니다.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3">
+                    <!-- Search Input -->
+                    <div class="relative flex-1 sm:w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <input type="text" id="searchInput" oninput="renderTable()" placeholder="학급명 또는 팀명 검색..." 
+                            class="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                    </div>
+
+                    <!-- Admin Edit Actions (Hidden by default) -->
+                    <div id="adminControls" class="hidden flex items-center gap-2">
+                        <button onclick="openAddModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-3.5 py-2 rounded-xl text-sm flex items-center gap-1.5 shadow-sm transition-all">
+                            <i class="fa-solid fa-plus text-xs"></i> 학급 추가
+                        </button>
+                        <button onclick="resetData()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium px-3.5 py-2 rounded-xl text-sm flex items-center gap-1.5 transition-all" title="초기 샘플 데이터로 복원">
+                            <i class="fa-solid fa-rotate-right text-xs"></i> 초기화
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto custom-scrollbar">
+                <table class="w-full text-left border-collapse min-w-[700px]">
+                    <thead>
+                        <tr class="bg-slate-100/70 text-slate-600 text-xs uppercase font-bold tracking-wider border-b border-slate-200">
+                            <th class="py-3.5 px-4 text-center w-16">순위</th>
+                            <th class="py-3.5 px-4 font-semibold">학급 / 팀명</th>
+                            <th class="py-3.5 px-4 text-center">경기 점수 (60)</th>
+                            <th class="py-3.5 px-4 text-center">응원 점수 (20)</th>
+                            <th class="py-3.5 px-4 text-center">질서/태도 (10)</th>
+                            <th class="py-3.5 px-4 text-center">참여율 (10)</th>
+                            <th class="py-3.5 px-4 text-center font-extrabold text-indigo-700 bg-indigo-50/50">총점 (100)</th>
+                            <th id="adminColHeader" class="hidden py-3.5 px-4 text-center w-28">관리</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scoreTableBody" class="divide-y divide-slate-100 text-sm font-medium text-slate-700">
+                        <!-- Dynamic Rows -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Table Footer info -->
+            <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-2">
+                <div>총 참가 팀: <span id="totalCount" class="font-bold text-slate-700">0</span>개 학급</div>
+                <div class="flex items-center gap-4">
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span> 1위</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-slate-400 inline-block"></span> 2위</span>
+                    <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-700 inline-block"></span> 3위</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal 1: Password Auth Modal -->
+    <div id="passwordModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5 border border-slate-100 transform transition-all">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-indigo-600"></i> 관리자 인증
+                </h3>
+                <button onclick="toggleAuthModal()" class="text-slate-400 hover:text-slate-600 rounded-lg p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <p class="text-sm text-slate-600">
+                배점 결과를 수정하거나 변경하려면 관리자 비밀번호를 입력해주세요.
+            </p>
+
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">비밀번호</label>
+                    <div class="relative">
+                        <input type="password" id="passwordInput" placeholder="비밀번호 입력" required
+                            class="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm transition-all">
+                        <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                            <i id="eyeIcon" class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                    <p id="passwordError" class="text-xs text-rose-500 mt-1.5 hidden flex items-center gap-1">
+                        <i class="fa-solid fa-circle-exclamation"></i> 비밀번호가 올바르지 않습니다.
+                    </p>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="toggleAuthModal()" class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-xl transition-all">
+                        취소
+                    </button>
+                    <button type="submit" class="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md transition-all">
+                        확인
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <!-- 1. 일정 탭 -->
-    <div id="tab-schedule" class="tab-content active">
-      <div class="grade-selector">
-        <button class="grade-btn active" data-grade="3" onclick="filterGrade(3)">3학년</button>
-        <button class="grade-btn" data-grade="2" onclick="filterGrade(2)">2학년</button>
-        <button class="grade-btn" data-grade="1" onclick="filterGrade(1)">1학년</button>
-      </div>
-      <div id="timeline-list" class="timeline"></div>
+    <!-- Modal 2: Edit Score Modal -->
+    <div id="editModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-5 border border-slate-100">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square text-indigo-600"></i> 배점 점수 수정
+                </h3>
+                <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-600 rounded-lg p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleSaveEdit(event)" class="space-y-4">
+                <input type="hidden" id="editId">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">학급 / 팀명</label>
+                    <input type="text" id="editName" required class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">경기 점수 (최대 60)</label>
+                        <input type="number" min="0" max="60" id="editGame" required oninput="calculateModalTotal()" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">응원 점수 (최대 20)</label>
+                        <input type="number" min="0" max="20" id="editCheer" required oninput="calculateModalTotal()" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">질서/태도 (최대 10)</label>
+                        <input type="number" min="0" max="10" id="editOrder" required oninput="calculateModalTotal()" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">참여율 (최대 10)</label>
+                        <input type="number" min="0" max="10" id="editParticipation" required oninput="calculateModalTotal()" class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                    </div>
+                </div>
+
+                <!-- Live Total Preview -->
+                <div class="bg-indigo-50/70 p-3.5 rounded-xl flex justify-between items-center border border-indigo-100">
+                    <span class="text-xs font-bold text-indigo-900">계산된 총점</span>
+                    <span id="modalTotalPreview" class="text-xl font-extrabold text-indigo-700">0 점</span>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-xl transition-all">
+                        취소
+                    </button>
+                    <button type="submit" class="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md transition-all">
+                        저장하기
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <!-- 2. 배점 결과 탭 -->
-    <div id="tab-result" class="tab-content">
-      <div class="score-card">
-        <h3>🏆 학년별 종합 순위 및 점수 계산</h3>
-        <p style="font-size:0.85rem; color:var(--text-sub); margin-top:4px;">종목별 순위를 입력하면 총점이 자동 계산됩니다.</p>
-        <table class="score-table">
-          <thead>
-            <tr>
-              <th>종목명</th>
-              <th>1등 (100점)</th>
-              <th>2등 (80점)</th>
-              <th>3등 (60점)</th>
-            </tr>
-          </thead>
-          <tbody id="score-table-body">
-            <!-- JS dynamic render -->
-          </tbody>
-        </table>
-      </div>
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-2 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toastMsg" class="text-sm font-medium">안내 메시지</span>
     </div>
 
-    <!-- 3. 규칙 탭 -->
-    <div id="tab-rules" class="tab-content">
-      <div class="rule-accordion" id="rule-accordion-list">
-        <!-- JS dynamic render -->
-      </div>
-    </div>
-  </div>
+    <script>
+        // --- CONSTANTS & INITIAL STATE ---
+        const ADMIN_PASS = "050505!";
+        const STORAGE_KEY = "hangaram_sports_scores_v1";
 
-  <!-- 푸터 -->
-  <footer id="footer-school">덕소중학교</footer>
+        let isAdmin = false;
 
-  <script>
-    /* ===================================================
-       [JS 데이터 마스터] - 데이터 수정 시 전체 화면 자동 업데이트
-       =================================================== */
-    const EVENT_DATA = {
-      title: "2026학년도 한가람 체육활동",
-      date: "2026-10-16",
-      time: "09:00 ~ 15:00",
-      location: "운동장, 체육관, 각 반 교실",
-      school: "덕소중학교"
-    };
+        // Sample Data if LocalStorage is empty
+        const defaultScores = [
+            { id: 1, name: "1학년 1반", game: 58, cheer: 19, order: 10, participation: 10 },
+            { id: 2, name: "1학년 2반", game: 52, cheer: 17, order: 9, participation: 8 },
+            { id: 3, name: "2학년 1반", game: 60, cheer: 20, order: 10, participation: 9 },
+            { id: 4, name: "2학년 2반", game: 48, cheer: 18, order: 8, participation: 10 },
+            { id: 5, name: "3학년 1반", game: 55, cheer: 16, order: 9, participation: 9 },
+            { id: 6, name: "3학년 2반", game: 45, cheer: 15, order: 8, participation: 8 },
+            { id: 7, name: "3학년 3반", game: 50, cheer: 19, order: 9, participation: 10 }
+        ];
 
-    // 이미지 표 기반 전체 Schedule 데이터
-    const SCHEDULE_DATA = [
-      {
-        order: "-",
-        time: "08:50 - 09:00",
-        location: "각 반 교실",
-        grades: { 1: "각반 출석체크 및 운동장 집결 완료", 2: "각반 출석체크 및 운동장 집결 완료", 3: "각반 출석체크 및 운동장 집결 완료" }
-      },
-      {
-        order: "-",
-        time: "09:00 - 09:20",
-        location: "운동장",
-        grades: { 1: "<전체 운동장 집결> 개회선언, 준비운동 후 이동", 2: "<전체 운동장 집결> 개회선언, 준비운동 후 이동", 3: "<전체 운동장 집결> 개회선언, 준비운동 후 이동" }
-      },
-      {
-        order: "1",
-        time: "09:20 - 10:20",
-        grades: {
-          3: { location: "운동장", title: "단체 경기" },
-          2: { location: "체육관", title: "피구 경기" },
-          1: { location: "각반교실", title: "협동 챌린지" }
-        }
-      },
-      {
-        order: "-",
-        time: "10:20 - 10:30",
-        location: "이동 경로",
-        grades: { 1: "휴식시간 및 이동 (보조준비운동 실시)", 2: "휴식시간 및 이동 (보조준비운동 실시)", 3: "휴식시간 및 이동 (보조준비운동 실시)" }
-      },
-      {
-        order: "2",
-        time: "10:30 - 11:30",
-        grades: {
-          3: { location: "체육관", title: "피구 경기" },
-          2: { location: "각반교실", title: "협동 챌린지" },
-          1: { location: "운동장", title: "단체 경기" }
-        }
-      },
-      {
-        order: "-",
-        time: "11:30 - 11:40",
-        location: "이동 경로",
-        grades: { 1: "휴식시간 및 이동 (보조준비운동 실시)", 2: "휴식시간 및 이동 (보조준비운동 실시)", 3: "휴식시간 및 이동 (보조준비운동 실시)" }
-      },
-      {
-        order: "3",
-        time: "11:40 - 12:40",
-        grades: {
-          3: { location: "각반교실", title: "협동 챌린지" },
-          2: { location: "운동장", title: "단체 경기" },
-          1: { location: "체육관", title: "피구 경기" }
-        }
-      },
-      {
-        order: "-",
-        time: "12:40 - 13:30",
-        location: "체육관 / 지정 장소",
-        grades: { 1: "점심시간 및 휴식시간 (*체육관: 학생자치회 스포츠부스 운영)", 2: "점심시간 및 휴식시간 (*체육관: 학생자치회 스포츠부스 운영)", 3: "점심시간 및 휴식시간 (*체육관: 학생자치회 스포츠부스 운영)" }
-      },
-      {
-        order: "4",
-        time: "13:30 - 14:15",
-        location: "운동장",
-        grades: {
-          1: "<전교생 운동장 집결>\n• 본교 체육동아리 축하공연 (댄스동아리)\n• 학년별 단체 줄넘기\n• 이어달리기 결승\n• 시상 및 마무리",
-          2: "<전교생 운동장 집결>\n• 본교 체육동아리 축하공연 (댄스동아리)\n• 학년별 단체 줄넘기\n• 이어달리기 결승\n• 시상 및 마무리",
-          3: "<전교생 운동장 집결>\n• 본교 체육동아리 축하공연 (댄스동아리)\n• 학년별 단체 줄넘기\n• 이어달리기 결승\n• 시상 및 마무리"
-        }
-      },
-      {
-        order: "-",
-        time: "14:15 - 15:00",
-        location: "교내 전역",
-        grades: { 1: "교내정화활동 (봉사)", 2: "교내정화활동 (봉사)", 3: "교내정화활동 (봉사)" }
-      }
-    ];
+        let scoresData = [];
 
-    // 종목 및 규칙 데이터
-    const RULES_DATA = [
-      { id: "dodgeball", title: "🏐 피구 경기 규칙", content: "• 팀당 선발 인원 준수\n• 라인 터치 시 상대편 공격권 이관\n• 상대 얼굴 공격(헤드샷) 금지" },
-      { id: "group", title: "🏃‍♂️ 단체 경기 (운동장) 규칙", content: "• 팀별 정해진 트랙 지키기\n• 신체접촉 최소화 및 안전수칙 준수" },
-      { id: "coop", title: "🧩 협동 챌린지 (각반 교실) 규칙", content: "• 반 전체 참여 항목\n• 지시사항 준수 및 시간 제한 측정" },
-      { id: "rope", title: "🪢 단체 줄넘기 규칙", content: "• 걸리지 않고 연이어 뛴 횟수를 합산\n• 기회는 총 2회 부여" },
-      { id: "relay", title: "🏃‍♀️ 이어달리기 규칙", content: "• 바통 터치구역(존) 이탈 주의\n• 고의적 방해 행위 시 감점 처리" }
-    ];
-
-    let currentSelectedGrade = 3;
-
-    /* ===================================================
-       [JS 초기화 및 랜더링 함수]
-       =================================================== */
-    window.addEventListener("DOMContentLoaded", () => {
-      initHeaderInfo();
-      calculateDDay();
-      renderSchedule(currentSelectedGrade);
-      renderRules();
-      renderScoreTable();
-    });
-
-    // 1. 헤더 기본 데이터 로드
-    function initHeaderInfo() {
-      document.getElementById("event-title").innerText = EVENT_DATA.title;
-      document.getElementById("event-info").innerText = `📅 일시: ${EVENT_DATA.date} (${EVENT_DATA.time})  |  📍 장소: ${EVENT_DATA.location}`;
-      document.getElementById("footer-school").innerText = EVENT_DATA.school;
-    }
-
-    // 2. D-Day 실시간 계산기
-    function calculateDDay() {
-      const today = new Date();
-      const targetDate = new Date(EVENT_DATA.date);
-      today.setHours(0,0,0,0);
-      targetDate.setHours(0,0,0,0);
-
-      const diffTime = targetDate - today;
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-      const ddayBadge = document.getElementById("dday-badge");
-      if (diffDays > 0) {
-        ddayBadge.innerText = `D-${diffDays}`;
-      } else if (diffDays === 0) {
-        ddayBadge.innerText = "D-DAY (오늘!) 🔥";
-      } else {
-        ddayBadge.innerText = `D+${Math.abs(diffDays)}`;
-      }
-    }
-
-    // 3. 탭 전환
-    function switchTab(tabName) {
-      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
-      document.querySelectorAll(".tab-content").forEach(content => content.classList.remove("active"));
-
-      const indexMap = { 'schedule': 0, 'result': 1, 'rules': 2 };
-      document.querySelectorAll(".tab-btn")[indexMap[tabName]].classList.add("active");
-      document.getElementById(`tab-${tabName}`).classList.add("active");
-    }
-
-    // 4. 학년 필터링 & 시간표 렌더링
-    function filterGrade(grade) {
-      currentSelectedGrade = grade;
-      document.querySelectorAll(".grade-btn").forEach(btn => btn.classList.remove("active"));
-      document.querySelector(`.grade-btn[data-grade="${grade}"]`).classList.add("active");
-      renderSchedule(grade);
-    }
-
-    function renderSchedule(grade) {
-      const timelineList = document.getElementById("timeline-list");
-      timelineList.innerHTML = "";
-
-      SCHEDULE_DATA.forEach(item => {
-        const gradeInfo = item.grades[grade];
-        const card = document.createElement("div");
-        card.className = `timeline-item grade-${grade}`;
-
-        let locText = item.location || "";
-        let titleText = "";
-
-        if (typeof gradeInfo === "object" && gradeInfo !== null) {
-          locText = gradeInfo.location;
-          titleText = gradeInfo.title;
-        } else {
-          titleText = gradeInfo;
+        // --- INIT DATA ---
+        function initData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    scoresData = JSON.parse(saved);
+                } catch (e) {
+                    scoresData = [...defaultScores];
+                }
+            } else {
+                scoresData = [...defaultScores];
+            }
+            renderAll();
         }
 
-        card.innerHTML = `
-          <div class="time-header">
-            <span>⏰ ${item.time} ${item.order !== '-' ? `(순서 ${item.order})` : ''}</span>
-            <span class="location-tag">📍 ${locText}</span>
-          </div>
-          <div class="event-title">${titleText.replace(/\n/g, '<br>')}</div>
-        `;
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(scoresData));
+            renderAll();
+        }
 
-        timelineList.appendChild(card);
-      });
-    }
+        function resetData() {
+            if (confirm("모든 배점 데이터를 초기화하시겠습니까?")) {
+                scoresData = [...defaultScores];
+                saveData();
+                showToast("데이터가 초기 상태로 복원되었습니다.");
+            }
+        }
 
-    // 5. 규칙 아코디언 렌더링 & 토글
-    function renderRules() {
-      const container = document.getElementById("rule-accordion-list");
-      container.innerHTML = "";
+        // --- RANK & SCORE CALCULATIONS ---
+        function getProcessedScores() {
+            // Calculate total for each
+            let list = scoresData.map(item => {
+                const total = (Number(item.game) || 0) + 
+                              (Number(item.cheer) || 0) + 
+                              (Number(item.order) || 0) + 
+                              (Number(item.participation) || 0);
+                return { ...item, total };
+            });
 
-      RULES_DATA.forEach((rule, idx) => {
-        const item = document.createElement("div");
-        item.className = "rule-item";
-        item.innerHTML = `
-          <div class="rule-header" onclick="toggleRule(${idx})">
-            <span>${rule.title}</span>
-            <span>▼</span>
-          </div>
-          <div class="rule-content" id="rule-content-${idx}">
-            ${rule.content.replace(/\n/g, '<br>')}
-          </div>
-        `;
-        container.appendChild(item);
-      });
-    }
+            // Sort by total descending
+            list.sort((a, b) => b.total - a.total);
 
-    function toggleRule(index) {
-      const items = document.querySelectorAll(".rule-item");
-      items[index].classList.toggle("active");
-    }
+            // Assign ranks (handling ties)
+            let currentRank = 1;
+            for (let i = 0; i < list.length; i++) {
+                if (i > 0 && list[i].total < list[i - 1].total) {
+                    currentRank = i + 1;
+                }
+                list[i].rank = currentRank;
+            }
 
-    // 6. 점수표 렌더링
-    function renderScoreTable() {
-      const tbody = document.getElementById("score-table-body");
-      tbody.innerHTML = "";
+            return list;
+        }
 
-      RULES_DATA.forEach(rule => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td style="font-weight:700;">${rule.title.replace(/^[^\s]+\s/, '')}</td>
-          <td><input type="text" class="score-input" placeholder="반"></td>
-          <td><input type="text" class="score-input" placeholder="반"></td>
-          <td><input type="text" class="score-input" placeholder="반"></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-  </script>
+        // --- UI RENDER FUNCTIONS ---
+        function renderAll() {
+            const processed = getProcessedScores();
+            renderPodium(processed);
+            renderTable(processed);
+            updateAdminUI();
+        }
+
+        function renderPodium(processedData) {
+            const container = document.getElementById("podiumCards");
+            container.innerHTML = "";
+
+            const top3 = processedData.slice(0, 3);
+            if (top3.length === 0) {
+                container.innerHTML = `<p class="text-sm text-slate-500 col-span-3 text-center py-4">등록된 데이터가 없습니다.</p>`;
+                return;
+            }
+
+            // Podium Display Mapping (1st, 2nd, 3rd styling)
+            const badges = [
+                { bg: "bg-gradient-to-br from-amber-400 to-amber-600", border: "border-amber-300", text: "text-amber-600", label: "1위 (우승)", icon: "fa-trophy" },
+                { bg: "bg-gradient-to-br from-slate-300 to-slate-500", border: "border-slate-300", text: "text-slate-500", label: "2위 (준우승)", icon: "fa-medal" },
+                { bg: "bg-gradient-to-br from-amber-700 to-amber-900", border: "border-amber-800", text: "text-amber-800", label: "3위 (3위)", icon: "fa-award" }
+            ];
+
+            top3.forEach((item, index) => {
+                const style = badges[index] || badges[2];
+                const cardHtml = `
+                    <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm relative overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
+                        <div class="absolute -right-3 -top-3 w-16 h-16 ${style.bg} opacity-10 rounded-full flex items-center justify-center"></div>
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-white ${style.bg} shadow-sm">
+                                    <i class="fa-solid ${style.icon}"></i> ${style.label}
+                                </span>
+                                <span class="text-2xl font-black text-slate-800 tracking-tight">${item.total} <span class="text-xs font-normal text-slate-500">점</span></span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900">${escapeHtml(item.name)}</h3>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 grid grid-cols-2 gap-y-1">
+                            <span>경기: <strong class="text-slate-700">${item.game}</strong></span>
+                            <span>응원: <strong class="text-slate-700">${item.cheer}</strong></span>
+                            <span>질서: <strong class="text-slate-700">${item.order}</strong></span>
+                            <span>참여: <strong class="text-slate-700">${item.participation}</strong></span>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        }
+
+        function renderTable(processedData) {
+            if (!processedData) processedData = getProcessedScores();
+
+            const searchQuery = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+            const tbody = document.getElementById("scoreTableBody");
+            tbody.innerHTML = "";
+
+            const filtered = processedData.filter(item => item.name.toLowerCase().includes(searchQuery));
+
+            document.getElementById("totalCount").innerText = filtered.length;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="${isAdmin ? 8 : 7}" class="text-center py-8 text-slate-400 text-sm">
+                            <i class="fa-solid fa-folder-open text-2xl mb-2 block"></i>
+                            검색 결과 또는 등록된 배점 결과가 없습니다.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            filtered.forEach(item => {
+                let rankBadge = `<span class="font-bold text-slate-600">${item.rank}위</span>`;
+                if (item.rank === 1) rankBadge = `<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-100 text-amber-700 font-extrabold text-xs border border-amber-300">1</span>`;
+                else if (item.rank === 2) rankBadge = `<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-200 text-slate-700 font-extrabold text-xs border border-slate-300">2</span>`;
+                else if (item.rank === 3) rankBadge = `<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-amber-900/10 text-amber-800 font-extrabold text-xs border border-amber-800/20">3</span>`;
+
+                const adminTd = isAdmin ? `
+                    <td class="py-3 px-4 text-center">
+                        <div class="flex items-center justify-center gap-1.5">
+                            <button onclick="openEditModal(${item.id})" class="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="수정">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button onclick="deleteItem(${item.id})" class="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" title="삭제">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </td>
+                ` : '';
+
+                const trHtml = `
+                    <tr class="hover:bg-slate-50/80 transition-colors">
+                        <td class="py-3.5 px-4 text-center">${rankBadge}</td>
+                        <td class="py-3.5 px-4 font-bold text-slate-800">${escapeHtml(item.name)}</td>
+                        <td class="py-3.5 px-4 text-center text-slate-600">${item.game}</td>
+                        <td class="py-3.5 px-4 text-center text-slate-600">${item.cheer}</td>
+                        <td class="py-3.5 px-4 text-center text-slate-600">${item.order}</td>
+                        <td class="py-3.5 px-4 text-center text-slate-600">${item.participation}</td>
+                        <td class="py-3.5 px-4 text-center font-extrabold text-indigo-700 bg-indigo-50/30 text-base">${item.total}</td>
+                        ${adminTd}
+                    </tr>
+                `;
+                tbody.insertAdjacentHTML('beforeend', trHtml);
+            });
+        }
+
+        // --- AUTH & MODE CONTROL ---
+        function updateAdminUI() {
+            const authBtnText = document.getElementById("authBtnText");
+            const authIcon = document.getElementById("authIcon");
+            const modeBadge = document.getElementById("modeBadge");
+            const adminControls = document.getElementById("adminControls");
+            const adminColHeader = document.getElementById("adminColHeader");
+
+            if (isAdmin) {
+                authBtnText.innerText = "로그아웃";
+                authIcon.className = "fa-solid fa-right-from-bracket";
+                modeBadge.className = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-400/20 text-amber-200 border border-amber-400/30";
+                modeBadge.innerHTML = `<i class="fa-solid fa-pen-to-square text-xs"></i> 관리자 수정 모드`;
+                
+                adminControls.classList.remove("hidden");
+                adminColHeader.classList.remove("hidden");
+            } else {
+                authBtnText.innerText = "관리자 로그인";
+                authIcon.className = "fa-solid fa-lock";
+                modeBadge.className = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-200 border border-emerald-400/30";
+                modeBadge.innerHTML = `<i class="fa-solid fa-eye text-xs"></i> 일반 조회 모드`;
+                
+                adminControls.classList.add("hidden");
+                adminColHeader.classList.add("hidden");
+            }
+        }
+
+        function toggleAuthModal() {
+            if (isAdmin) {
+                // Logout
+                isAdmin = false;
+                showToast("관리자 모드가 해제되었습니다.");
+                renderAll();
+            } else {
+                // Show modal
+                document.getElementById("passwordInput").value = "";
+                document.getElementById("passwordError").classList.add("hidden");
+                document.getElementById("passwordModal").classList.remove("hidden");
+                setTimeout(() => document.getElementById("passwordInput").focus(), 100);
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const inputPass = document.getElementById("passwordInput").value;
+            if (inputPass === ADMIN_PASS) {
+                isAdmin = true;
+                document.getElementById("passwordModal").classList.add("hidden");
+                showToast("관리자 인증 성공! 점수 수정이 가능합니다.");
+                renderAll();
+            } else {
+                document.getElementById("passwordError").classList.remove("hidden");
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const input = document.getElementById("passwordInput");
+            const icon = document.getElementById("eyeIcon");
+            if (input.type === "password") {
+                input.type = "text";
+                icon.className = "fa-solid fa-eye-slash";
+            } else {
+                input.type = "password";
+                icon.className = "fa-solid fa-eye";
+            }
+        }
+
+        // --- SCORE EDITING HANDLERS ---
+        function openEditModal(id) {
+            if (!isAdmin) return;
+            const item = scoresData.find(s => s.id === id);
+            if (!item) return;
+
+            document.getElementById("editId").value = item.id;
+            document.getElementById("editName").value = item.name;
+            document.getElementById("editGame").value = item.game;
+            document.getElementById("editCheer").value = item.cheer;
+            document.getElementById("editOrder").value = item.order;
+            document.getElementById("editParticipation").value = item.participation;
+
+            calculateModalTotal();
+            document.getElementById("editModal").classList.remove("hidden");
+        }
+
+        function openAddModal() {
+            if (!isAdmin) return;
+            const newId = scoresData.length > 0 ? Math.max(...scoresData.map(s => s.id)) + 1 : 1;
+            
+            document.getElementById("editId").value = "";
+            document.getElementById("editName").value = `신규 학급 ${newId}`;
+            document.getElementById("editGame").value = 0;
+            document.getElementById("editCheer").value = 0;
+            document.getElementById("editOrder").value = 0;
+            document.getElementById("editParticipation").value = 0;
+
+            calculateModalTotal();
+            document.getElementById("editModal").classList.remove("hidden");
+        }
+
+        function closeEditModal() {
+            document.getElementById("editModal").classList.add("hidden");
+        }
+
+        function calculateModalTotal() {
+            const game = Number(document.getElementById("editGame").value) || 0;
+            const cheer = Number(document.getElementById("editCheer").value) || 0;
+            const order = Number(document.getElementById("editOrder").value) || 0;
+            const part = Number(document.getElementById("editParticipation").value) || 0;
+            
+            document.getElementById("modalTotalPreview").innerText = `${game + cheer + order + part} 점`;
+        }
+
+        function handleSaveEdit(e) {
+            e.preventDefault();
+            if (!isAdmin) return;
+
+            const idVal = document.getElementById("editId").value;
+            const name = document.getElementById("editName").value.trim();
+            const game = Math.min(60, Math.max(0, Number(document.getElementById("editGame").value) || 0));
+            const cheer = Math.min(20, Math.max(0, Number(document.getElementById("editCheer").value) || 0));
+            const order = Math.min(10, Math.max(0, Number(document.getElementById("editOrder").value) || 0));
+            const participation = Math.min(10, Math.max(0, Number(document.getElementById("editParticipation").value) || 0));
+
+            if (!name) return;
+
+            if (idVal) {
+                // Update existing
+                const id = Number(idVal);
+                const idx = scoresData.findIndex(s => s.id === id);
+                if (idx !== -1) {
+                    scoresData[idx] = { id, name, game, cheer, order, participation };
+                }
+            } else {
+                // Add new
+                const newId = scoresData.length > 0 ? Math.max(...scoresData.map(s => s.id)) + 1 : 1;
+                scoresData.push({ id: newId, name, game, cheer, order, participation });
+            }
+
+            saveData();
+            closeEditModal();
+            showToast("배점 결과가 성공적으로 저장되었습니다.");
+        }
+
+        function deleteItem(id) {
+            if (!isAdmin) return;
+            const item = scoresData.find(s => s.id === id);
+            if (!item) return;
+
+            if (confirm(`'${item.name}' 항목을 삭제하시겠습니까?`)) {
+                scoresData = scoresData.filter(s => s.id !== id);
+                saveData();
+                showToast("항목이 삭제되었습니다.");
+            }
+        }
+
+        // --- UTILS ---
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            document.getElementById("toastMsg").innerText = message;
+            
+            toast.classList.remove("translate-y-20", "opacity-0");
+            toast.classList.add("translate-y-0", "opacity-100");
+
+            setTimeout(() => {
+                toast.classList.remove("translate-y-0", "opacity-100");
+                toast.classList.add("translate-y-20", "opacity-0");
+            }, 3000);
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>"']/g, function(m) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                }[m];
+            });
+        }
+
+        // --- ON LOAD ---
+        window.onload = function() {
+            initData();
+        };
+    </script>
 </body>
 </html>
