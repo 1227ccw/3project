@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2026학년도 한가람 체육활동 안내</title>
   <style>
-    /* ===================================================
-       1. 기본 스타일 및 변수 정의 (밝고 활기찬 분위기)
-       =================================================== */
     :root {
       --primary-color: #ff6b6b;
       --bg-color: #f7f9fc;
@@ -15,7 +12,6 @@
       --text-main: #2c3e50;
       --text-sub: #7f8c8d;
       
-      /* 학년별 테마 색상 (3학년: 파랑, 2학년: 초록, 1학년: 주황) */
       --grade3-color: #3f51b5;
       --grade3-light: #e8eaf6;
       --grade2-color: #2e7d32;
@@ -42,14 +38,12 @@
 
     .container {
       width: 100%;
-      max-width: 800px;
+      max-width: 900px;
       padding: 16px;
       flex: 1;
     }
 
-    /* ===================================================
-       2. 헤더 및 D-Day 카운트다운
-       =================================================== */
+    /* 헤더 및 D-Day */
     header {
       background: linear-gradient(135deg, #ff8e53, #ff6b6b);
       color: white;
@@ -64,13 +58,13 @@
       font-size: 1.6rem;
       font-weight: 800;
       margin-bottom: 8px;
-      letter-spacing: -0.5px;
     }
 
     header .event-info {
       font-size: 0.95rem;
       opacity: 0.95;
       margin-bottom: 16px;
+      line-height: 1.5;
     }
 
     .dday-badge {
@@ -84,9 +78,7 @@
       border: 1px solid rgba(255, 255, 255, 0.4);
     }
 
-    /* ===================================================
-       3. 메인 탭 메뉴
-       =================================================== */
+    /* 탭 메뉴 */
     .tab-menu {
       display: flex;
       gap: 8px;
@@ -123,9 +115,7 @@
       display: block;
     }
 
-    /* ===================================================
-       4. 일정 탭 스타일 (학년 선택 & 서브 탭)
-       =================================================== */
+    /* 학년 선택 버튼 */
     .grade-selector {
       display: flex;
       gap: 10px;
@@ -134,10 +124,10 @@
 
     .grade-btn {
       flex: 1;
-      padding: 10px;
+      padding: 12px;
       border: 2px solid transparent;
       border-radius: 12px;
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
       background-color: #edf2f7;
@@ -161,6 +151,7 @@
       border-color: var(--grade1-color);
     }
 
+    /* 타임라인 카드 */
     .timeline {
       display: flex;
       flex-direction: column;
@@ -175,10 +166,9 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      border-left: 5px solid #cbd5e0;
+      border-left: 6px solid #cbd5e0;
     }
 
-    /* 학년별 대표 카드 서식 */
     .timeline-item.grade-3 { border-left-color: var(--grade3-color); }
     .timeline-item.grade-2 { border-left-color: var(--grade2-color); }
     .timeline-item.grade-1 { border-left-color: var(--grade1-color); }
@@ -194,9 +184,9 @@
 
     .location-tag {
       display: inline-block;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
       font-weight: 700;
       background-color: #edf2f7;
       color: #4a5568;
@@ -206,13 +196,11 @@
       font-size: 1.1rem;
       font-weight: 700;
       color: var(--text-main);
-      line-height: 1.4;
+      line-height: 1.5;
     }
 
-    /* ===================================================
-       5. 결과 탭 (점수 자동 계산)
-       =================================================== */
-    .score-card {
+    /* 결과 & 카드 디자인 */
+    .card-box {
       background: white;
       border-radius: 16px;
       padding: 20px;
@@ -220,46 +208,112 @@
       margin-bottom: 20px;
     }
 
-    .score-table {
-      width: 100%;
-      border-collapse: collapse;
+    .card-box h3 {
+      margin-bottom: 8px;
+      font-size: 1.15rem;
+      color: #1a202c;
+    }
+
+    /* 관리자 인증 폼 */
+    .auth-box {
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    .auth-box input[type="password"] {
+      padding: 12px;
+      width: 220px;
+      border: 2px solid #cbd5e0;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      margin-right: 8px;
+    }
+
+    .auth-box button {
+      padding: 12px 20px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
       margin-top: 12px;
     }
 
+    .score-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+
     .score-table th, .score-table td {
-      padding: 10px;
+      padding: 10px 6px;
       text-align: center;
       border-bottom: 1px solid #edf2f7;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
 
     .score-table th {
       background-color: #f8fafc;
       font-weight: 700;
+      color: #4a5568;
+      white-space: nowrap;
     }
 
-    .score-input {
-      width: 50px;
-      padding: 6px;
-      text-align: center;
+    .rank-select {
+      width: 100%;
+      padding: 6px 2px;
       border: 1px solid #cbd5e0;
       border-radius: 6px;
       font-weight: 700;
+      background: #fff;
+      font-size: 0.85rem;
     }
 
-    .total-score {
+    .total-score-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .class-score-card {
+      background: #f7fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 4px;
+      text-align: center;
+    }
+
+    .class-score-card.rank-1 {
+      border-color: #ff6b6b;
+      background-color: #fff5f5;
+    }
+
+    .class-score-card .class-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #4a5568;
+    }
+
+    .class-score-card .score-num {
+      font-size: 1.1rem;
       font-weight: 800;
       color: var(--primary-color);
-      font-size: 1.05rem;
+      margin-top: 4px;
     }
 
-    /* ===================================================
-       6. 규칙 탭
-       =================================================== */
+    /* 규칙 아코디언 */
     .rule-accordion {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .rule-item {
@@ -267,11 +321,13 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      border: 1px solid #edf2f7;
     }
 
     .rule-header {
       padding: 16px;
       font-weight: 700;
+      font-size: 1.05rem;
       cursor: pointer;
       display: flex;
       justify-content: space-between;
@@ -293,22 +349,27 @@
       display: block;
     }
 
-    /* ===================================================
-       7. 하단 푸터
-       =================================================== */
+    .rule-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      background: #e2e8f0;
+      color: #4a5568;
+      margin-right: 6px;
+    }
+
     footer {
       text-align: center;
       padding: 24px;
       color: var(--text-sub);
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 600;
       width: 100%;
     }
 
-    /* PC 최적화 (큰 화면 지원) */
     @media (min-width: 768px) {
       header h1 { font-size: 2.2rem; }
-      .event-title { font-size: 1.25rem; }
       .container { padding: 24px; }
       .tab-btn { font-size: 1.1rem; padding: 14px 0; }
     }
@@ -317,7 +378,7 @@
 <body>
 
   <div class="container">
-    <!-- 헤더 영역 -->
+    <!-- 헤더 -->
     <header>
       <h1 id="event-title"></h1>
       <div class="event-info" id="event-info"></div>
@@ -327,8 +388,8 @@
     <!-- 메인 탭 메뉴 -->
     <div class="tab-menu">
       <button class="tab-btn active" onclick="switchTab('schedule')">일정</button>
-      <button class="tab-btn" onclick="switchTab('result')">배점 결과</button>
-      <button class="tab-btn" onclick="switchTab('rules')">규칙</button>
+      <button class="tab-btn" onclick="switchTab('result')">배점 및 결과 (관리자)</button>
+      <button class="tab-btn" onclick="switchTab('rules')">종목별 규칙</button>
     </div>
 
     <!-- 1. 일정 탭 -->
@@ -341,31 +402,58 @@
       <div id="timeline-list" class="timeline"></div>
     </div>
 
-    <!-- 2. 배점 결과 탭 -->
+    <!-- 2. 배점 및 결과 탭 -->
     <div id="tab-result" class="tab-content">
-      <div class="score-card">
-        <h3>🏆 학년별 종합 순위 및 점수 계산</h3>
-        <p style="font-size:0.85rem; color:var(--text-sub); margin-top:4px;">종목별 순위를 입력하면 총점이 자동 계산됩니다.</p>
-        <table class="score-table">
-          <thead>
-            <tr>
-              <th>종목명</th>
-              <th>1등 (100점)</th>
-              <th>2등 (80점)</th>
-              <th>3등 (60점)</th>
-            </tr>
-          </thead>
-          <tbody id="score-table-body">
-            <!-- JS dynamic render -->
-          </tbody>
-        </table>
+      <!-- 관리자 인증 영역 -->
+      <div id="admin-auth-container" class="card-box auth-box">
+        <h3>🔒 관리자 전용 영역</h3>
+        <p style="font-size:0.9rem; color:var(--text-sub); margin: 10px 0 15px 0;">배점 입력 및 결과를 확인하려면 비밀번호를 입력해 주세요.</p>
+        <div>
+          <input type="password" id="admin-pass-input" placeholder="비밀번호 입력">
+          <button onclick="checkAdminPassword()">인증</button>
+        </div>
+      </div>
+
+      <!-- 인증 후 나타나는 배점 결과 영역 -->
+      <div id="admin-content-container" style="display: none;">
+        <div class="card-box">
+          <div style="display:flex; justify-shadow:space-between; align-items:center; margin-bottom:12px;">
+            <h3>📊 학년별/반별 배점 종합 점수</h3>
+            <button onclick="lockAdmin()" style="padding:6px 12px; background:#e2e8f0; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">잠금 🔒</button>
+          </div>
+
+          <!-- 학년 선택 -->
+          <div class="grade-selector">
+            <button class="grade-btn result-grade-btn active" data-grade="3" onclick="switchResultGrade(3)">3학년</button>
+            <button class="grade-btn result-grade-btn" data-grade="2" onclick="switchResultGrade(2)">2학년</button>
+            <button class="grade-btn result-grade-btn" data-grade="1" onclick="switchResultGrade(1)">1학년</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="score-table">
+              <thead>
+                <tr id="calc-table-header">
+                  <!-- JS Dynamic Header -->
+                </tr>
+              </thead>
+              <tbody id="calc-table-body">
+                <!-- JS Dynamic Body -->
+              </tbody>
+            </table>
+          </div>
+
+          <h4 style="margin-top: 20px; color:#2d3748;">🏆 최종 실시간 총점 (1~10반)</h4>
+          <div class="total-score-grid" id="total-score-board">
+            <!-- JS Dynamic Total Score Cards -->
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- 3. 규칙 탭 -->
     <div id="tab-rules" class="tab-content">
       <div class="rule-accordion" id="rule-accordion-list">
-        <!-- JS dynamic render -->
+        <!-- JS Dynamic Rules -->
       </div>
     </div>
   </div>
@@ -375,123 +463,79 @@
 
   <script>
     /* ===================================================
-       [JS 데이터 마스터] - 데이터 수정 시 전체 화면 자동 업데이트
+       [데이터 정의]
        =================================================== */
     const EVENT_DATA = {
       title: "2026학년도 한가람 체육활동",
       date: "2026-10-16",
-      time: "09:00 ~ 15:00",
+      time: "08:50 ~ 15:00",
       location: "운동장, 체육관, 각 반 교실",
       school: "덕소중학교"
     };
 
-    // 이미지 표 기반 전체 Schedule 데이터
+    // 암호화/비교용 관리자 비밀번호
+    const ADMIN_PW = "050505!";
+    let isAdminAuthenticated = false;
+    let selectedResultGrade = 3;
+
+    // 학년별 10개 반 (1~10반) 점수 수집 객체 (3학년, 2학년, 1학년)
+    const SCORES_DATA = {
+      1: {}, 2: {}, 3: {}
+    };
+
+    // 타임라인 데이터[cite: 1, 2]
     const SCHEDULE_DATA = [
-      {
-        order: "-",
-        time: "08:50 - 09:00",
-        location: "각 반 교실",
-        grades: { 1: "각반 출석체크 및 운동장 집결 완료", 2: "각반 출석체크 및 운동장 집결 완료", 3: "각반 출석체크 및 운동장 집결 완료" }
-      },
-      {
-        order: "-",
-        time: "09:00 - 09:20",
-        location: "운동장",
-        grades: { 1: "<전체 운동장 집결> 개회선언, 준비운동 후 이동", 2: "<전체 운동장 집결> 개회선언, 준비운동 후 이동", 3: "<전체 운동장 집결> 개회선언, 준비운동 후 이동" }
-      },
-      {
-        order: "1",
-        time: "09:20 - 10:20",
-        grades: {
-          3: { location: "운동장", title: "단체 경기" },
-          2: { location: "체육관", title: "피구 경기" },
-          1: { location: "각반교실", title: "협동 챌린지" }
-        }
-      },
-      {
-        order: "-",
-        time: "10:20 - 10:30",
-        location: "이동 경로",
-        grades: { 1: "휴식시간 및 이동 (보조준비운동 실시)", 2: "휴식시간 및 이동 (보조준비운동 실시)", 3: "휴식시간 및 이동 (보조준비운동 실시)" }
-      },
-      {
-        order: "2",
-        time: "10:30 - 11:30",
-        grades: {
-          3: { location: "체육관", title: "피구 경기" },
-          2: { location: "각반교실", title: "협동 챌린지" },
-          1: { location: "운동장", title: "단체 경기" }
-        }
-      },
-      {
-        order: "-",
-        time: "11:30 - 11:40",
-        location: "이동 경로",
-        grades: { 1: "휴식시간 및 이동 (보조준비운동 실시)", 2: "휴식시간 및 이동 (보조준비운동 실시)", 3: "휴식시간 및 이동 (보조준비운동 실시)" }
-      },
-      {
-        order: "3",
-        time: "11:40 - 12:40",
-        grades: {
-          3: { location: "각반교실", title: "협동 챌린지" },
-          2: { location: "운동장", title: "단체 경기" },
-          1: { location: "체육관", title: "피구 경기" }
-        }
-      },
-      {
-        order: "-",
-        time: "12:40 - 13:30",
-        location: "체육관 / 지정 장소",
-        grades: { 1: "점심시간 및 휴식시간 (*체육관: 학생자치회 스포츠부스 운영)", 2: "점심시간 및 휴식시간 (*체육관: 학생자치회 스포츠부스 운영)", 3: "점심시간 및 휴식시간 (*체육관: 학생자치회 스포츠부스 운영)" }
-      },
-      {
-        order: "4",
-        time: "13:30 - 14:15",
-        location: "운동장",
-        grades: {
-          1: "<전교생 운동장 집결>\n• 본교 체육동아리 축하공연 (댄스동아리)\n• 학년별 단체 줄넘기\n• 이어달리기 결승\n• 시상 및 마무리",
-          2: "<전교생 운동장 집결>\n• 본교 체육동아리 축하공연 (댄스동아리)\n• 학년별 단체 줄넘기\n• 이어달리기 결승\n• 시상 및 마무리",
-          3: "<전교생 운동장 집결>\n• 본교 체육동아리 축하공연 (댄스동아리)\n• 학년별 단체 줄넘기\n• 이어달리기 결승\n• 시상 및 마무리"
-        }
-      },
-      {
-        order: "-",
-        time: "14:15 - 15:00",
-        location: "교내 전역",
-        grades: { 1: "교내정화활동 (봉사)", 2: "교내정화활동 (봉사)", 3: "교내정화활동 (봉사)" }
-      }
+      { order: "-", time: "08:50 - 09:00", location: "각 반 교실", grades: { 1: "각반 출석체크 및 운동장 집결 완료", 2: "각반 출석체크 및 운동장 집결 완료", 3: "각반 출석체크 및 운동장 집결 완료" } },
+      { order: "-", time: "09:00 - 09:20", location: "운동장", grades: { 1: "<전체 운동장 집결> 개회선언, 준비운동 후 이동", 2: "<전체 운동장 집결> 개회선언, 준비운동 후 이동", 3: "<전체 운동장 집결> 개회선언, 준비운동 후 이동" } },
+      { order: "1", time: "09:20 - 10:20", grades: { 3: { location: "운동장", title: "단체 경기 (파이프 연결, 플라잉디스크 윷놀이)" }, 2: { location: "체육관", title: "피구 경기 (전원참여 피구)" }, 1: { location: "각반교실", title: "협동 챌린지 (체육 골든벨)" } } },
+      { order: "-", time: "10:20 - 10:30", location: "이동 경로", grades: { 1: "휴식시간 및 이동 (경주시작 전 보조준비운동 실시)", 2: "휴식시간 및 이동 (경주시작 전 보조준비운동 실시)", 3: "휴식시간 및 이동 (경주시작 전 보조준비운동 실시)" } },
+      { order: "2", time: "10:30 - 11:30", grades: { 3: { location: "체육관", title: "피구 경기 (전원참여 피구)" }, 2: { location: "각반교실", title: "협동 챌린지 (체육 골든벨)" }, 1: { location: "운동장", title: "단체 경기 (파이프 연결, 플라잉디스크 윷놀이)" } } },
+      { order: "-", time: "11:30 - 11:40", location: "이동 경로", grades: { 1: "휴식시간 및 이동 (경주시작 전 보조준비운동 실시)", 2: "휴식시간 및 이동 (경주시작 전 보조준비운동 실시)", 3: "휴식시간 및 이동 (경주시작 전 보조준비운동 실시)" } },
+      { order: "3", time: "11:40 - 12:40", grades: { 3: { location: "각반교실", title: "협동 챌린지 (체육 골든벨)" }, 2: { location: "운동장", title: "단체 경기 (파이프 연결, 플라잉디스크 윷놀이)" }, 1: { location: "체육관", title: "피구 경기 (전원참여 피구)" } } },
+      { order: "-", time: "12:40 - 13:30", location: "체육관 / 지정 장소", grades: { 1: "점심시간 및 휴식시간 (*체육관: 학생자치회 스포츠부스 운영)", 2: "점심시간 및 휴식시간 (*체육관: 학생자치회 스포츠부스 운영)", 3: "점심시간 및 휴식시간 (*체육관: 학생자치회 스포츠부스 운영)" } },
+      { order: "4", time: "13:30 - 14:15", location: "운동장", grades: { 1: "<전교생 운동장 집결>\n• 본교 체육동아리 축하공연 (댄스동아리)\n• 학년별 단체 줄넘기\n• 이어달리기 결승\n• 시상 및 마무리", 2: "<전교생 운동장 집결>\n• 본교 체육동아리 축하공연 (댄스동아리)\n• 학년별 단체 줄넘기\n• 이어달리기 결승\n• 시상 및 마무리", 3: "<전교생 운동장 집결>\n• 본교 체육동아리 축하공연 (댄스동아리)\n• 학년별 단체 줄넘기\n• 이어달리기 결승\n• 시상 및 마무리" } },
+      { order: "-", time: "14:15 - 15:00", location: "교내 전역", grades: { 1: "교내정화활동 (봉사시간 인정)", 2: "교내정화활동 (봉사시간 인정)", 3: "교내정화활동 (봉사시간 인정)" } }
     ];
 
-    // 종목 및 규칙 데이터
+    // 자동 점수 계산용 종목 리스트 (순위별 점수 산정)
+    const SCORE_CALC_ITEMS = [
+      { name: "피구 경기", scores: { 1: 100, 2: 90, 3: 80, 4: 70, 5: 60, 6: 50, 7: 40, 8: 30, 9: 20, 10: 10 } },
+      { name: "파이프 연결", scores: { 1: 100, 2: 90, 3: 80, 4: 70, 5: 60, 6: 50, 7: 40, 8: 30, 9: 20, 10: 10 } },
+      { name: "플라잉디스크 윷놀이", scores: { 1: 100, 2: 90, 3: 80, 4: 70, 5: 60, 6: 50, 7: 40, 8: 30, 9: 20, 10: 10 } },
+      { name: "체육 골든벨", scores: { 1: 100, 2: 90, 3: 80, 4: 70, 5: 60, 6: 50, 7: 40, 8: 30, 9: 20, 10: 10 } },
+      { name: "단체 줄넘기", scores: { 1: 100, 2: 90, 3: 80, 4: 70, 5: 60, 6: 50, 7: 40, 8: 30, 9: 20, 10: 10 } },
+      { name: "이어달리기 계주", scores: { 1: 150, 2: 135, 3: 120, 4: 105, 5: 90, 6: 75, 7: 60, 8: 45, 9: 30, 10: 15 } }
+    ];
+
+    // 종목별 규칙 데이터
     const RULES_DATA = [
-      { id: "dodgeball", title: "🏐 피구 경기 규칙", content: "• 팀당 선발 인원 준수\n• 라인 터치 시 상대편 공격권 이관\n• 상대 얼굴 공격(헤드샷) 금지" },
-      { id: "group", title: "🏃‍♂️ 단체 경기 (운동장) 규칙", content: "• 팀별 정해진 트랙 지키기\n• 신체접촉 최소화 및 안전수칙 준수" },
-      { id: "coop", title: "🧩 협동 챌린지 (각반 교실) 규칙", content: "• 반 전체 참여 항목\n• 지시사항 준수 및 시간 제한 측정" },
-      { id: "rope", title: "🪢 단체 줄넘기 규칙", content: "• 걸리지 않고 연이어 뛴 횟수를 합산\n• 기회는 총 2회 부여" },
-      { id: "relay", title: "🏃‍♀️ 이어달리기 규칙", content: "• 바통 터치구역(존) 이탈 주의\n• 고의적 방해 행위 시 감점 처리" }
+      { title: "🏐 전원참여 피구 (체육관)", location: "체육관", content: `• 학급 전원 참가 (남/여 구분 경기 후 합산 점수 반영)\n• 경기 시간: 전반/후반 각 7분\n• 공격 시 아웃된 주자는 상대 진영 외야로 이동\n• 얼굴, 머리 맞출 시 노아웃(공격권 이관)\n• 라인 터치 시 상대편 공격권 이관` },
+      { title: "🧩 단체 경기 1: 파이프 연결 (운동장)", location: "운동장", content: `• 반 전체 참가\n• 파이프 반원 관을 서로 이어 붙여 탁구공/골프공을 끊이지 않고 목표 지점까지 이송\n• 공이 바닥에 떨어질 경우 출발선 또는 이전 체크포인트에서 재출발\n• 제한시간 내에 지정된 구역을 통과한 순서대로 순위 결정` },
+      { title: "🎯 단체 경기 2: 플라잉디스크 윷놀이 (운동장)", location: "운동장", content: `• 학급 대표 및 단체 참가\n• 플라잉디스크를 던져 윷놀이 판(도, 개, 걸, 윷, 모, 백도)에 착지시켜 말 이동\n• 상대 말을 잡거나 먼저 도착 지점에 모든 말이 들어오는 반이 승리` },
+      { title: "🔔 협동 챌린지: 체육 골든벨 (각반 교실)", location: "각 반 교실", content: `• TV 방송 또는 방송반 주관 진행\n• 체육 상식, 학교 역사, 올림픽 관련 문제 출제\n• 화이트보드에 답을 적어 제출, 누적 정답 수가 가장 높은 반이 우승` },
+      { title: "🪢 학년별 단체 줄넘기 (운동장)", location: "운동장", content: `• 줄돌리기 2명 + 뛰기 인원 참가\n• 제한시간 3분 동안 걸리지 않고 연속으로 많이 뛴 횟수를 측정\n• 총 2회 시도 중 더 높은 기록 반영` },
+      { title: "🏃‍♂️ 학년별 이어달리기 결승 (운동장)", location: "운동장", content: `• 반별 대표 주자 참가\n• 바통 존(Passing Zone) 내에서 안전하게 바통을 주고받아야 함\n• 주로 이탈 및 고의적 방해 행위 발생 시 감점 또는 자격 박탈` }
     ];
 
     let currentSelectedGrade = 3;
 
     /* ===================================================
-       [JS 초기화 및 랜더링 함수]
+       [초기화 및 로직]
        =================================================== */
     window.addEventListener("DOMContentLoaded", () => {
       initHeaderInfo();
       calculateDDay();
       renderSchedule(currentSelectedGrade);
       renderRules();
-      renderScoreTable();
+      initScoresStorage();
     });
 
-    // 1. 헤더 기본 데이터 로드
     function initHeaderInfo() {
       document.getElementById("event-title").innerText = EVENT_DATA.title;
-      document.getElementById("event-info").innerText = `📅 일시: ${EVENT_DATA.date} (${EVENT_DATA.time})  |  📍 장소: ${EVENT_DATA.location}`;
+      document.getElementById("event-info").innerText = `📅 일시: ${EVENT_DATA.date} (${EVENT_DATA.time})\n📍 장소: ${EVENT_DATA.location}`;
       document.getElementById("footer-school").innerText = EVENT_DATA.school;
     }
 
-    // 2. D-Day 실시간 계산기
     function calculateDDay() {
       const today = new Date();
       const targetDate = new Date(EVENT_DATA.date);
@@ -511,7 +555,6 @@
       }
     }
 
-    // 3. 탭 전환
     function switchTab(tabName) {
       document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
       document.querySelectorAll(".tab-content").forEach(content => content.classList.remove("active"));
@@ -521,7 +564,6 @@
       document.getElementById(`tab-${tabName}`).classList.add("active");
     }
 
-    // 4. 학년 필터링 & 시간표 렌더링
     function filterGrade(grade) {
       currentSelectedGrade = grade;
       document.querySelectorAll(".grade-btn").forEach(btn => btn.classList.remove("active"));
@@ -560,7 +602,115 @@
       });
     }
 
-    // 5. 규칙 아코디언 렌더링 & 토글
+    /* 관리자 인증 기능 */
+    function checkAdminPassword() {
+      const input = document.getElementById("admin-pass-input").value;
+      if (input === ADMIN_PW) {
+        isAdminAuthenticated = true;
+        document.getElementById("admin-auth-container").style.display = "none";
+        document.getElementById("admin-content-container").style.display = "block";
+        document.getElementById("admin-pass-input").value = "";
+        renderResultTable();
+      } else {
+        alert("비밀번호가 올바르지 않습니다.");
+        document.getElementById("admin-pass-input").value = "";
+      }
+    }
+
+    function lockAdmin() {
+      isAdminAuthenticated = false;
+      document.getElementById("admin-auth-container").style.display = "block";
+      document.getElementById("admin-content-container").style.display = "none";
+    }
+
+    /* 점수표 초기화 및 렌더링 */
+    function initScoresStorage() {
+      [1, 2, 3].forEach(g => {
+        SCORE_CALC_ITEMS.forEach((_, itemIdx) => {
+          if (!SCORES_DATA[g][itemIdx]) SCORES_DATA[g][itemIdx] = {};
+          for (let c = 1; c <= 10; c++) {
+            if (!SCORES_DATA[g][itemIdx][c]) SCORES_DATA[g][itemIdx][c] = 0;
+          }
+        });
+      });
+    }
+
+    function switchResultGrade(grade) {
+      selectedResultGrade = grade;
+      document.querySelectorAll(".result-grade-btn").forEach(btn => btn.classList.remove("active"));
+      document.querySelector(`.result-grade-btn[data-grade="${grade}"]`).classList.add("active");
+      renderResultTable();
+    }
+
+    function renderResultTable() {
+      if (!isAdminAuthenticated) return;
+
+      // 헤더 렌더링 (종목명 + 1~10반)
+      const headerTr = document.getElementById("calc-table-header");
+      headerTr.innerHTML = `<th>종목명</th>` + Array.from({length: 10}, (_, i) => `<th>${i+1}반</th>`).join('');
+
+      // 바디 렌더링
+      const tbody = document.getElementById("calc-table-body");
+      tbody.innerHTML = "";
+
+      SCORE_CALC_ITEMS.forEach((item, itemIdx) => {
+        const tr = document.createElement("tr");
+        let classOptionsHTML = '';
+
+        for (let cls = 1; cls <= 10; cls++) {
+          const currentRank = SCORES_DATA[selectedResultGrade][itemIdx][cls] || 0;
+          classOptionsHTML += `
+            <td>
+              <select class="rank-select" onchange="updateRank(${selectedResultGrade}, ${itemIdx}, ${cls}, this.value)">
+                <option value="0">선택</option>
+                ${Array.from({length: 10}, (_, r) => `<option value="${r+1}" ${currentRank === (r+1) ? 'selected' : ''}>${r+1}등</option>`).join('')}
+              </select>
+            </td>
+          `;
+        }
+
+        tr.innerHTML = `<td style="font-weight:700; white-space:nowrap;">${item.name}</td>` + classOptionsHTML;
+        tbody.appendChild(tr);
+      });
+
+      updateTotalScoresBoard();
+    }
+
+    function updateRank(grade, itemIdx, cls, rankVal) {
+      SCORES_DATA[grade][itemIdx][cls] = parseInt(rankVal);
+      updateTotalScoresBoard();
+    }
+
+    function updateTotalScoresBoard() {
+      const classTotals = {};
+      for (let c = 1; c <= 10; c++) classTotals[c] = 0;
+
+      SCORE_CALC_ITEMS.forEach((item, itemIdx) => {
+        for (let cls = 1; cls <= 10; cls++) {
+          const rank = SCORES_DATA[selectedResultGrade][itemIdx][cls];
+          if (rank > 0) {
+            classTotals[cls] += item.scores[rank] || 0;
+          }
+        }
+      });
+
+      const maxScore = Math.max(...Object.values(classTotals));
+      const board = document.getElementById("total-score-board");
+      board.innerHTML = "";
+
+      for (let cls = 1; cls <= 10; cls++) {
+        const score = classTotals[cls];
+        const isLeader = score > 0 && score === maxScore;
+        const card = document.createElement("div");
+        card.className = `class-score-card ${isLeader ? 'rank-1' : ''}`;
+        card.innerHTML = `
+          <div class="class-name">${cls}반 ${isLeader ? '👑' : ''}</div>
+          <div class="score-num">${score}점</div>
+        `;
+        board.appendChild(card);
+      }
+    }
+
     function renderRules() {
       const container = document.getElementById("rule-accordion-list");
       container.innerHTML = "";
@@ -570,10 +720,10 @@
         item.className = "rule-item";
         item.innerHTML = `
           <div class="rule-header" onclick="toggleRule(${idx})">
-            <span>${rule.title}</span>
+            <span><span class="rule-tag">${rule.location}</span>${rule.title}</span>
             <span>▼</span>
           </div>
-          <div class="rule-content" id="rule-content-${idx}">
+          <div class="rule-content">
             ${rule.content.replace(/\n/g, '<br>')}
           </div>
         `;
@@ -584,23 +734,6 @@
     function toggleRule(index) {
       const items = document.querySelectorAll(".rule-item");
       items[index].classList.toggle("active");
-    }
-
-    // 6. 점수표 렌더링
-    function renderScoreTable() {
-      const tbody = document.getElementById("score-table-body");
-      tbody.innerHTML = "";
-
-      RULES_DATA.forEach(rule => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td style="font-weight:700;">${rule.title.replace(/^[^\s]+\s/, '')}</td>
-          <td><input type="text" class="score-input" placeholder="반"></td>
-          <td><input type="text" class="score-input" placeholder="반"></td>
-          <td><input type="text" class="score-input" placeholder="반"></td>
-        `;
-        tbody.appendChild(tr);
-      });
     }
   </script>
 </body>
